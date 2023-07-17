@@ -20,14 +20,14 @@ function AuthModal({}: Props) {
       {/* fullscreen container to centre the panel */}
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <Dialog.Panel className="w-96 p-4 mx-auto max-w-sm rounded bg-white flex flex-col items-center justify-center">
-          <div className="w-full flex justify-between items-center">
+          <div className="w-full flex justify-center items-center mb-4 relative">
             <Dialog.Title className="text-xl font-bold">
               {view === "login" && "Log In"}
               {view === "signup" && "Sign Up"}
               {view === "resetPassword" && "Reset Password"}
             </Dialog.Title>
             <XMarkIcon
-              className="h-5 w-5 text-gray-500 cursor-pointer"
+              className="h-5 w-5 text-gray-500 cursor-pointer absolute right-0"
               onClick={() => setOpen(false)}
             />
           </div>
