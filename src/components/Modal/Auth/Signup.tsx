@@ -7,6 +7,7 @@ function Signup({}: Props) {
   const [SignupForm, setSignupForm] = useState({
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const { setView } = useAuthModalStore();
@@ -58,6 +59,24 @@ function Signup({}: Props) {
           className="text-gray-600 absolute left-4 -top-5 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 transition-all peer-focus:-top-5 peer-focus:text-gray-600 peer-focus:text-sm peer-hover:-top-5 peer-hover:text-gray-600 peer-hover:text-sm"
         >
           Password
+        </label>
+      </div>
+
+      <div className="relative">
+        <input
+          onChange={onChange}
+          required
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          placeholder="Password"
+          className="border-gray-100 peer w-full border hover:border-gray-300 focus:border-gray-300 py-2 px-4 mb-3 rounded-full bg-gray-50 focus:outline-none placeholder-transparent"
+        />
+        <label
+          htmlFor="confirmPassword"
+          className="text-gray-600 absolute left-4 -top-5 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-placeholder-shown:top-2 transition-all peer-focus:-top-5 peer-focus:text-gray-600 peer-focus:text-sm peer-hover:-top-5 peer-hover:text-gray-600 peer-hover:text-sm"
+        >
+          Confirm Password
         </label>
       </div>
 
