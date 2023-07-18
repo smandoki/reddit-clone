@@ -42,14 +42,18 @@ function AuthModal({}: Props) {
           </div>
 
           <div className="flex flex-col items-center justify-center w-[80%]">
-            <OAuthButtons />
+            {view !== "resetPassword" && (
+              <>
+                <OAuthButtons />
 
-            {/* Visual divider between OAuth buttons and email/password fields */}
-            <div className="mt-3 flex w-full items-center gap-2">
-              <div className="border border-b-0 border-gray-200 grow"></div>
-              <p className="text-sm font-bold text-gray-500">OR</p>
-              <div className="border border-b-0 border-gray-200 grow"></div>
-            </div>
+                {/* Visual divider between OAuth buttons and email/password fields */}
+                <div className="mt-3 flex w-full items-center gap-2">
+                  <div className="border border-b-0 border-gray-200 grow"></div>
+                  <p className="text-sm font-bold text-gray-500">OR</p>
+                  <div className="border border-b-0 border-gray-200 grow"></div>
+                </div>
+              </>
+            )}
 
             <AuthInputs />
             {/* ResetPassword */}

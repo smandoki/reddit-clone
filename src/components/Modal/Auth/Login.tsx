@@ -96,6 +96,16 @@ function Login({}: Props) {
       )}
 
       <div className="flex items-center justify-center text-sm">
+        <p className="mr-2">Forgot your password?</p>
+        <p
+          className="text-blue-500 cursor-pointer font-bold"
+          onClick={() => setView("resetPassword")}
+        >
+          RESET
+        </p>
+      </div>
+
+      <div className="flex items-center justify-center text-sm">
         <p className="mr-2">New here?</p>
         <p
           className="text-blue-500 cursor-pointer font-bold"
