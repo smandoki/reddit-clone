@@ -108,7 +108,7 @@ function Signup({}: Props) {
       {/* display firebase errors */}
       {error && (
         <p className="text-center text-red-500 -mt-5 text-sm">
-          {FIREBASE_ERRORS[error.message]}
+          {FIREBASE_ERRORS[error.message] ?? error.message}
         </p>
       )}
 

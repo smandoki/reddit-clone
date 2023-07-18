@@ -1,9 +1,13 @@
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../firebase/firebaseConfig";
 import RightContent from "./RightContent/RightContent";
 import SearchInput from "./SearchInput";
 
 type Props = {};
 
 function Navbar({}: Props) {
+  const [user, loading, error] = useAuthState(auth);
+
   return (
     <header className="flex h-12 px-2 bg-white">
       <div className="flex items-center">
@@ -16,7 +20,7 @@ function Navbar({}: Props) {
       </div>
 
       <SearchInput />
-      <RightContent />
+      <RightContent user={user} />
     </header>
   );
 }

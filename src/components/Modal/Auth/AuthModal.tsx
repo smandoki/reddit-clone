@@ -1,13 +1,21 @@
+import { useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useAuthModalStore } from "../../../stores/authModalStore";
 import AuthInputs from "./AuthInputs";
 import OAuthButtons from "./OAuthButtons";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../../firebase/firebaseConfig";
 
 type Props = {};
 
 function AuthModal({}: Props) {
   const { open, view, setOpen } = useAuthModalStore();
+  const [user, loading, error] = useAuthState(auth);
+
+  useEffect(() => {
+    if (user) setOpen(false);
+  }, [user]);
 
   return (
     <Dialog

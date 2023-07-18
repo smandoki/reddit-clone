@@ -34,7 +34,7 @@ function OAuthButtons({}: Props) {
 
       {error && (
         <p className="text-center text-red-500 -mt-4 text-sm">
-          {FIREBASE_ERRORS[error.message]}
+          {FIREBASE_ERRORS[error.message] ?? error.message}
         </p>
       )}
     </div>
