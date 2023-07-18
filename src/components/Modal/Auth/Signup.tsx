@@ -1,20 +1,38 @@
 import { useState } from "react";
 import { useAuthModalStore } from "../../../stores/authModalStore";
+import { auth } from "../../../firebase/firebaseConfig";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { FIREBASE_ERRORS } from "../../../firebase/errors";
 
 type Props = {};
 
 function Signup({}: Props) {
-  const [SignupForm, setSignupForm] = useState({
+  const [signupForm, setSignupForm] = useState({
     email: "",
     password: "",
     confirmPassword: "",
   });
 
+  const [showPasswordError, setShowPasswordError] = useState(false);
   const { setView } = useAuthModalStore();
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const [createUserWithEmailAndPassword, user, loading, error] =
+    useCreateUserWithEmailAndPassword(auth);
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    //TODO: firebase logic
+
+    if (error) error.message = "";
+    setShowPasswordError(false);
+
+    if (signupForm.password !== signupForm.confirmPassword) {
+      setShowPasswordError(true);
+      return;
+    }
+
+    await createUserWithEmailAndPassword(signupForm.email, signupForm.password);
+
+    console.log(error);
   }
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -52,6 +70,7 @@ function Signup({}: Props) {
           id="password"
           name="password"
           placeholder="Password"
+          minLength={6}
           className="border-gray-100 peer w-full border hover:border-gray-300 focus:border-gray-300 py-2 px-4 mb-3 rounded-full bg-gray-50 focus:outline-none placeholder-transparent"
         />
         <label
@@ -70,6 +89,7 @@ function Signup({}: Props) {
           id="confirmPassword"
           name="confirmPassword"
           placeholder="Password"
+          minLength={6}
           className="border-gray-100 peer w-full border hover:border-gray-300 focus:border-gray-300 py-2 px-4 mb-3 rounded-full bg-gray-50 focus:outline-none placeholder-transparent"
         />
         <label
@@ -80,12 +100,39 @@ function Signup({}: Props) {
         </label>
       </div>
 
-      <button
-        type="submit"
-        className="w-full mb-3 h-10 text-sm text-white bg-blue-500 border-2 border-blue-500 rounded-full px-2 py-1 hover:brightness-95 active:brightness-90"
-      >
-        Sign Up
-      </button>
+      {/* show passwords do not match error */}
+      {showPasswordError && (
+        <p className="text-center text-red-500 -mt-5 text-sm">
+          Passwords do not match.
+        </p>
+      )}
+
+      {/* display firebase errors */}
+      {error && (
+        <p className="text-center text-red-500 -mt-5 text-sm">
+          {FIREBASE_ERRORS[error.message]}
+        </p>
+      )}
+
+      {/* submit button */}
+      {!loading && (
+        <button
+          type="submit"
+          className="flex items-center justify-center w-full mb-3 h-10 text-sm text-white bg-blue-500 border-2 border-blue-500 rounded-full px-2 py-1 hover:brightness-95 active:brightness-90"
+        >
+          Sign Up
+        </button>
+      )}
+
+      {/* disabled button with loading indicator */}
+      {loading && (
+        <button
+          disabled
+          className="opacity-60 flex items-center justify-center w-full mb-3 h-10 text-sm text-white bg-blue-500 border-2 border-blue-500 rounded-full px-2 py-1"
+        >
+          <div className="animate-spin border-4 rounded-full h-5 w-5 border-gray-300 border-t-white"></div>
+        </button>
+      )}
 
       <div className="flex items-center justify-center text-sm">
         <p className="mr-2">Already signed up?</p>
