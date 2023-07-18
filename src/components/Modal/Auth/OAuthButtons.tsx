@@ -12,7 +12,7 @@ function OAuthButtons({}: Props) {
       {!loading && (
         <button
           onClick={() => signInWithGoogle()}
-          className="flex text-gray-600 bg-white w-full rounded-full justify-center items-center gap-2 p-2 border border-gray-400 hover:bg-gray-50 active:bg-gray-100"
+          className="h-10 flex text-gray-600 bg-white w-full rounded-full justify-center items-center gap-2 p-2 border border-gray-400 hover:bg-gray-50 active:bg-gray-100"
         >
           <img
             src="/images/googlelogo.png"
@@ -26,15 +26,9 @@ function OAuthButtons({}: Props) {
       {loading && (
         <button
           disabled
-          className="opacity-60 relative flex text-gray-600 bg-white w-full rounded-full justify-center items-center gap-2 p-2 border border-gray-400"
+          className="h-10 opacity-60 flex text-gray-600 bg-white w-full rounded-full justify-center items-center gap-2 p-2 border border-gray-400"
         >
-          <img
-            src="/images/googlelogo.png"
-            alt="google logo"
-            className="h-5 w-5"
-          />
-          <p className="font-bold">Continue with Google</p>
-          <div className="absolute animate-spin border-4 rounded-full h-5 w-5 border-gray-300 border-t-gray-900"></div>
+          <div className="animate-spin border-4 rounded-full h-5 w-5 border-gray-300 border-t-gray-900"></div>
         </button>
       )}
 
