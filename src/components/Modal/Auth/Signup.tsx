@@ -19,7 +19,7 @@ function Signup({}: Props) {
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (error) error.message = "";
@@ -30,9 +30,7 @@ function Signup({}: Props) {
       return;
     }
 
-    await createUserWithEmailAndPassword(signupForm.email, signupForm.password);
-
-    console.log(error);
+    createUserWithEmailAndPassword(signupForm.email, signupForm.password);
   }
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
