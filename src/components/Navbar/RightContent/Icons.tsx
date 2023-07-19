@@ -9,22 +9,34 @@ type Props = {};
 
 function Icons({}: Props) {
   return (
-    <div className="flex">
+    <div className="flex gap-1">
       <div className="hidden md:flex items-center border-r border-r-gray-200">
-        <div className="flex items-center justify-center mx-1 p-1 cursor-pointer hover:bg-gray-200">
+        <div
+          title="trending"
+          className="flex items-center justify-center mr-1 p-1 cursor-pointer hover:bg-gray-200"
+        >
           <ArrowTrendingUpIcon className="h-6 w-6 text-gray-800" />
         </div>
       </div>
 
-      <div className="flex items-center justify-center mx-1 p-1 cursor-pointer hover:bg-gray-200">
+      <div
+        title="chat"
+        className="flex items-center justify-center p-1 cursor-pointer hover:bg-gray-200"
+      >
         <ChatBubbleOvalLeftEllipsisIcon className="h-6 w-6 text-gray-800" />
       </div>
 
-      <div className="flex items-center justify-center mx-1 p-1 cursor-pointer hover:bg-gray-200">
+      <div
+        title="notifications"
+        className="flex items-center justify-center p-1 cursor-pointer hover:bg-gray-200"
+      >
         <BellIcon className="h-6 w-6 text-gray-800" />
       </div>
 
-      <div className="flex items-center justify-center mx-1 p-1 cursor-pointer hover:bg-gray-200">
+      <div
+        title="create post"
+        className="flex items-center justify-center p-1 cursor-pointer hover:bg-gray-200"
+      >
         <PlusIcon className="h-6 w-6 text-gray-800" />
       </div>
     </div>
