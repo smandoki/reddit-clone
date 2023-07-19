@@ -20,7 +20,7 @@ function UserMenu({ user }: Props) {
 
   return (
     <Menu>
-      <Menu.Button className="flex items-center gap-1.5 border border-transparent hover:border-gray-200 py-1 px-2 my-[2px] rounded-s">
+      <Menu.Button className="min-w-max flex items-center gap-1.5 border border-transparent hover:border-gray-200 py-1 px-2 my-[3px] rounded">
         <UserIcon className="h-8 w-8 bg-gray-300 p-[2px] text-white rounded" />
 
         {user && (
