@@ -36,8 +36,13 @@ function CreateCommunityModal({ open, handleClose }: Props) {
     e.preventDefault();
   }
 
+  function onClose() {
+    setCommunityForm({ name: "", type: "public" });
+    handleClose();
+  }
+
   return (
-    <Dialog open={open} onClose={handleClose} className="relative z-50">
+    <Dialog open={open} onClose={onClose} className="relative z-50">
       {/* modal backdrop */}
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
 
@@ -51,7 +56,7 @@ function CreateCommunityModal({ open, handleClose }: Props) {
             </Dialog.Title>
             <XMarkIcon
               className="h-5 w-5 text-gray-500 cursor-pointer"
-              onClick={handleClose}
+              onClick={onClose}
             />
           </div>
 
@@ -79,11 +84,15 @@ function CreateCommunityModal({ open, handleClose }: Props) {
                   required
                   onChange={onChange}
                   value={communityForm.name}
-                  className="border border-gray-200 rounded p-1 pl-6 grow"
+                  className="border border-gray-200 rounded p-1 pl-6 grow focus:outline-blue-500"
                 />
               </div>
 
-              <p className="text-[12px] text-gray-500 mb-7">
+              <p
+                className={`${
+                  charsRemaining ? "text-gray-500" : "text-red-500"
+                } text-[12px] mb-7`}
+              >
                 {charsRemaining} characters remaining
               </p>
 
@@ -97,11 +106,16 @@ function CreateCommunityModal({ open, handleClose }: Props) {
                     name="type"
                     value="public"
                     id="public"
+                    className="cursor-pointer"
                     checked={communityForm.type === "public"}
                     onChange={onChange}
                   />
-                  <UserIcon className="h-4 w-4 text-gray-500" />
-                  <label htmlFor="public" className="text-[14px] font-medium">
+
+                  <label
+                    htmlFor="public"
+                    className="text-[14px] font-medium flex gap-2 items-center cursor-pointer"
+                  >
+                    <UserIcon className="h-4 w-4 text-gray-500" />
                     Public
                   </label>
                 </div>
@@ -117,12 +131,16 @@ function CreateCommunityModal({ open, handleClose }: Props) {
                     name="type"
                     value="restricted"
                     id="restricted"
+                    className="cursor-pointer"
                     checked={communityForm.type === "restricted"}
                     onChange={onChange}
                   />
-                  <EyeIcon className="h-4 w-4 text-gray-500" />
-                  <label htmlFor="public" className="text-[14px] font-medium">
-                    Restricted
+
+                  <label
+                    htmlFor="restricted"
+                    className="text-[14px] font-medium flex gap-2 items-center cursor-pointer"
+                  >
+                    <EyeIcon className="h-4 w-4 text-gray-500" /> Restricted
                   </label>
                 </div>
                 <p className="text-[12px] text-gray-500">
@@ -138,11 +156,16 @@ function CreateCommunityModal({ open, handleClose }: Props) {
                     name="type"
                     value="private"
                     id="private"
+                    className="cursor-pointer"
                     checked={communityForm.type === "private"}
                     onChange={onChange}
                   />
-                  <LockClosedIcon className="h-4 w-4 text-gray-500" />
-                  <label htmlFor="private" className="text-[14px] font-medium">
+
+                  <label
+                    htmlFor="private"
+                    className="text-[14px] font-medium flex gap-2 items-center cursor-pointer"
+                  >
+                    <LockClosedIcon className="h-4 w-4 text-gray-500" />
                     Private
                   </label>
                 </div>
@@ -157,7 +180,7 @@ function CreateCommunityModal({ open, handleClose }: Props) {
               <button
                 type="button"
                 className="text-sm font-semibold bg-gray-100 text-blue-500 border-2 border-blue-500 rounded-full px-4 py-1 min-w-max mr-1 hover:brightness-95 active:brightness-90"
-                onClick={handleClose}
+                onClick={onClose}
               >
                 Cancel
               </button>
