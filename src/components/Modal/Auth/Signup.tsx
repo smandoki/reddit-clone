@@ -50,6 +50,7 @@ function Signup({}: Props) {
           id="email"
           name="email"
           placeholder="Email"
+          value={signupForm.email}
           className="border-gray-100 peer w-full border hover:border-gray-300 focus:border-gray-300 py-2 px-4 mb-3 rounded-full bg-gray-50 focus:outline-none placeholder-transparent"
         />
         <label
@@ -69,6 +70,7 @@ function Signup({}: Props) {
           name="password"
           placeholder="Password"
           minLength={6}
+          value={signupForm.password}
           className="border-gray-100 peer w-full border hover:border-gray-300 focus:border-gray-300 py-2 px-4 mb-3 rounded-full bg-gray-50 focus:outline-none placeholder-transparent"
         />
         <label
@@ -88,6 +90,7 @@ function Signup({}: Props) {
           name="confirmPassword"
           placeholder="Password"
           minLength={6}
+          value={signupForm.confirmPassword}
           className="border-gray-100 peer w-full border hover:border-gray-300 focus:border-gray-300 py-2 px-4 mb-3 rounded-full bg-gray-50 focus:outline-none placeholder-transparent"
         />
         <label

@@ -41,6 +41,7 @@ function Login({}: Props) {
           id="email"
           name="email"
           placeholder="Email"
+          value={loginForm.email}
           className="border-gray-100 peer w-full border hover:border-gray-300 focus:border-gray-300 py-2 px-4 mb-3 rounded-full bg-gray-50 focus:outline-none placeholder-transparent"
         />
         <label
@@ -60,6 +61,7 @@ function Login({}: Props) {
           name="password"
           minLength={6}
           placeholder="Password"
+          value={loginForm.password}
           className="border-gray-100 peer w-full border hover:border-gray-300 focus:border-gray-300 py-2 px-4 mb-3 rounded-full bg-gray-50 focus:outline-none placeholder-transparent"
         />
         <label
