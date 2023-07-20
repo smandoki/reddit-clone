@@ -2,7 +2,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../firebase/firebaseConfig";
 import RightContent from "./RightContent/RightContent";
 import SearchInput from "./SearchInput";
-import NavMenu from "./NavMenu/NavMenu";
+import CommunityMenu from "./CommunityMenu/CommunityMenu";
 
 type Props = {};
 
@@ -23,7 +23,7 @@ function Navbar({}: Props) {
           className="h-12 hidden md:inline-flex"
         />
       </div>
-      {user && <NavMenu />}
+      {user && <CommunityMenu />}
       <SearchInput user={user} />
       <RightContent user={user} />
     </header>

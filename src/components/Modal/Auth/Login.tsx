@@ -3,6 +3,7 @@ import { useAuthModalStore } from "../../../stores/authModalStore";
 import { auth } from "../../../firebase/firebaseConfig";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { FIREBASE_ERRORS } from "../../../firebase/errors";
+import Spinner from "../../Spinner";
 
 type Props = {};
 
@@ -91,7 +92,7 @@ function Login({}: Props) {
           disabled
           className="opacity-60 flex items-center justify-center w-full mb-3 h-10 text-sm text-white bg-blue-500 border-2 border-blue-500 rounded-full px-2 py-1"
         >
-          <div className="animate-spin border-4 rounded-full h-5 w-5 border-gray-300 border-t-white"></div>
+          <Spinner />
         </button>
       )}
 
