@@ -12,10 +12,12 @@ function RightContent({ user }: Props) {
   return (
     <>
       <AuthModal />
-      <div className="flex justify-center items-center">
-        {user ? <Icons /> : <AuthButtons />}
+      <div className="flex gap-1">
+        <div className="flex justify-center items-center">
+          {user ? <Icons /> : <AuthButtons />}
+        </div>
+        <UserMenu user={user} />
       </div>
-      <UserMenu user={user} />
     </>
   );
 }

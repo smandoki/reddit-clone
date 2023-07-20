@@ -10,17 +10,21 @@ function Navbar({}: Props) {
   const [user, loading, error] = useAuthState(auth);
 
   return (
-    <header className="flex gap-[2px] h-12 px-2 bg-white">
+    <header className="flex gap-[2px] h-12 px-2 bg-white justify-between">
       <div className="flex items-center md:min-w-max">
-        <img src="/images/redditFace.svg" alt="reddit logo" className="h-8" />
+        <img
+          src="/images/redditFace.svg"
+          alt="reddit logo"
+          className="h-8 w-8 min-w-[32px]"
+        />
         <img
           src="/images/redditText.svg"
           alt="reddit title"
           className="h-12 hidden md:inline-flex"
         />
       </div>
-      <NavMenu />
-      <SearchInput />
+      {user && <NavMenu />}
+      <SearchInput user={user} />
       <RightContent user={user} />
     </header>
   );
