@@ -1,11 +1,29 @@
 import { FIREBASE_ERRORS } from "../../../firebase/errors";
-import { auth } from "../../../firebase/firebaseConfig";
+import { auth, firestore } from "../../../firebase/firebaseConfig";
 import { useSignInWithGoogle } from "react-firebase-hooks/auth";
+import { useEffect } from "react";
+import { doc, setDoc } from "firebase/firestore";
+import { User } from "firebase/auth";
 
 type Props = {};
 
 function OAuthButtons({}: Props) {
-  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+  const [signInWithGoogle, userCred, loading, error] =
+    useSignInWithGoogle(auth);
+
+  async function createUserDocument(user: User) {
+    await setDoc(
+      doc(firestore, "users", user.uid),
+      JSON.parse(JSON.stringify({ user })),
+      { merge: true }
+    );
+  }
+
+  useEffect(() => {
+    if (userCred) {
+      createUserDocument(userCred.user);
+    }
+  }, [userCred]);
 
   return (
     <div className="flex flex-col w-full my-4 gap-5">

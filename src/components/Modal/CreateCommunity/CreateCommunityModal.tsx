@@ -7,6 +7,9 @@ import {
 } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import LoadingButton from "../../LoadingButton";
+import { auth, firestore } from "../../../firebase/firebaseConfig";
+import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 type Props = {
   open: boolean;
@@ -24,6 +27,9 @@ function CreateCommunityModal({ open, handleClose }: Props) {
     type: "public",
   });
   const charsRemaining = 21 - communityForm.name.length;
+  const [error, setError] = useState("");
+  const [user] = useAuthState(auth);
+  const [loading, setLoading] = useState(false);
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     console.log(e.target.name, e.target.value);
@@ -38,8 +44,47 @@ function CreateCommunityModal({ open, handleClose }: Props) {
   }
 
   function onClose() {
+    //dont let them close modal while a submission is in progress
+    if (loading) return;
+
     setCommunityForm({ name: "", type: "public" });
     handleClose();
+  }
+
+  async function handleCreateCommunity() {
+    setError("");
+
+    //validate community name
+    const format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+    if (format.test(communityForm.name)) {
+      setError("Community name can only contain letters and numbers.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      //check community name is not taken
+      const communityDocRef = doc(firestore, "communities", communityForm.name);
+      const communityDoc = await getDoc(communityDocRef);
+
+      if (communityDoc.exists()) {
+        throw new Error("Community name is already taken. Try another.");
+      }
+
+      //create community
+      await setDoc(communityDocRef, {
+        creatorId: user?.uid,
+        createdAt: serverTimestamp(),
+        numberOfMembers: 1,
+        privacyType: communityForm.type,
+      });
+    } catch (error: any) {
+      console.log("handleCreateCommunity error", error);
+      setError(error.message);
+    }
+
+    setLoading(false);
   }
 
   return (
@@ -81,6 +126,7 @@ function CreateCommunityModal({ open, handleClose }: Props) {
                 <input
                   type="text"
                   name="name"
+                  minLength={3}
                   maxLength={21}
                   required
                   onChange={onChange}
@@ -92,13 +138,17 @@ function CreateCommunityModal({ open, handleClose }: Props) {
               <p
                 className={`${
                   charsRemaining ? "text-gray-500" : "text-red-500"
-                } text-[12px] mb-7`}
+                } text-[12px]`}
               >
                 {charsRemaining} characters remaining
               </p>
 
+              <p className="text-red-500 text-[15px] mt-1">{error}</p>
+
               {/* community type radio buttons */}
-              <h3 className="font-medium text-[15px] mb-2">Community Type</h3>
+              <h3 className="font-medium text-[15px] mt-7 mb-2">
+                Community Type
+              </h3>
 
               <div className="flex items-start gap-2 mb-2">
                 <div className="flex items-center gap-2">
@@ -178,31 +228,35 @@ function CreateCommunityModal({ open, handleClose }: Props) {
 
             {/* form buttons */}
             <div className="bg-gray-100 rounded-b p-4 flex gap-1 justify-end">
-              <button
-                type="button"
-                className="text-sm font-semibold bg-gray-100 text-blue-500 border-2 border-blue-500 rounded-full px-4 py-1 min-w-max mr-1 hover:brightness-95 active:brightness-90"
-                onClick={onClose}
-              >
-                Cancel
-              </button>
+              {!loading && (
+                <button
+                  type="button"
+                  className="text-sm font-semibold bg-gray-100 text-blue-500 border-2 border-blue-500 rounded-full px-4 py-1 min-w-max mr-1 hover:brightness-95 active:brightness-90"
+                  onClick={onClose}
+                >
+                  Cancel
+                </button>
+              )}
+
+              {loading && (
+                <button
+                  type="button"
+                  disabled
+                  className="opacity-60 text-sm font-semibold bg-gray-100 text-blue-500 border-2 border-blue-500 rounded-full px-4 py-1 min-w-max mr-1"
+                  onClick={onClose}
+                >
+                  Cancel
+                </button>
+              )}
+
               <LoadingButton
                 type="submit"
-                isLoading={true}
+                isLoading={loading}
                 className="text-sm font-semibold text-white bg-blue-500 border-2 border-blue-500 rounded-full px-4 py-1 min-w-[164px] hover:brightness-95 active:brightness-90"
-                onClick={() => {}}
+                onClick={handleCreateCommunity}
               >
                 Create Community
               </LoadingButton>
-
-              {/* disable cancel button when loading */}
-              {/* <button
-                type="button"
-                disabled
-                className="opacity-60 text-sm font-semibold bg-gray-100 text-blue-500 border-2 border-blue-500 rounded-full px-4 py-1 min-w-max mr-1"
-                onClick={onClose}
-              >
-                Cancel
-              </button> */}
             </div>
           </form>
         </Dialog.Panel>

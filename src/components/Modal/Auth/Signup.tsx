@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuthModalStore } from "../../../stores/authModalStore";
-import { auth } from "../../../firebase/firebaseConfig";
+import { auth, firestore } from "../../../firebase/firebaseConfig";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { FIREBASE_ERRORS } from "../../../firebase/errors";
+import { User } from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 type Props = {};
 
@@ -16,7 +18,7 @@ function Signup({}: Props) {
   const [showPasswordError, setShowPasswordError] = useState(false);
   const { setView } = useAuthModalStore();
 
-  const [createUserWithEmailAndPassword, user, loading, error] =
+  const [createUserWithEmailAndPassword, userCred, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -32,6 +34,20 @@ function Signup({}: Props) {
 
     createUserWithEmailAndPassword(signupForm.email, signupForm.password);
   }
+
+  async function createUserDocument(user: User) {
+    await setDoc(
+      doc(firestore, "users", user.uid),
+      JSON.parse(JSON.stringify(user)),
+      { merge: true }
+    );
+  }
+
+  useEffect(() => {
+    if (userCred) {
+      createUserDocument(userCred.user);
+    }
+  }, [userCred]);
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     setSignupForm((prev) => ({
