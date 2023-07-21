@@ -125,7 +125,7 @@ function Signup({}: Props) {
         </button>
       )}
 
-      {/* disabled button with loading indicator */}
+      {/* disabled submit button with loading indicator */}
       {loading && (
         <button
           disabled

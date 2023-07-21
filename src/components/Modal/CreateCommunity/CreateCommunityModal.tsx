@@ -6,6 +6,7 @@ import {
   LockClosedIcon,
 } from "@heroicons/react/24/solid";
 import { useState } from "react";
+import LoadingButton from "../../LoadingButton";
 
 type Props = {
   open: boolean;
@@ -119,7 +120,7 @@ function CreateCommunityModal({ open, handleClose }: Props) {
                     Public
                   </label>
                 </div>
-                <p className="text-[12px] text-gray-500">
+                <p className="text-[12px] text-gray-500 pt-[2.3px]">
                   Anyone can view, post, and comment to this community
                 </p>
               </div>
@@ -143,7 +144,7 @@ function CreateCommunityModal({ open, handleClose }: Props) {
                     <EyeIcon className="h-4 w-4 text-gray-500" /> Restricted
                   </label>
                 </div>
-                <p className="text-[12px] text-gray-500">
+                <p className="text-[12px] text-gray-500 pt-[2.3px]">
                   Anyone can view this community, but only approved users can
                   post
                 </p>
@@ -169,7 +170,7 @@ function CreateCommunityModal({ open, handleClose }: Props) {
                     Private
                   </label>
                 </div>
-                <p className="text-[12px] text-gray-500">
+                <p className="text-[12px] text-gray-500 pt-[2.3px]">
                   Only approved users can view and submit to this community
                 </p>
               </div>
@@ -184,13 +185,24 @@ function CreateCommunityModal({ open, handleClose }: Props) {
               >
                 Cancel
               </button>
-              <button
+              <LoadingButton
                 type="submit"
-                className="text-sm font-semibold text-white bg-blue-500 border-2 border-blue-500 rounded-full px-4 py-1 min-w-max hover:brightness-95 active:brightness-90"
+                isLoading={true}
+                className="text-sm font-semibold text-white bg-blue-500 border-2 border-blue-500 rounded-full px-4 py-1 min-w-[164px] hover:brightness-95 active:brightness-90"
                 onClick={() => {}}
               >
                 Create Community
-              </button>
+              </LoadingButton>
+
+              {/* disable cancel button when loading */}
+              {/* <button
+                type="button"
+                disabled
+                className="opacity-60 text-sm font-semibold bg-gray-100 text-blue-500 border-2 border-blue-500 rounded-full px-4 py-1 min-w-max mr-1"
+                onClick={onClose}
+              >
+                Cancel
+              </button> */}
             </div>
           </form>
         </Dialog.Panel>
