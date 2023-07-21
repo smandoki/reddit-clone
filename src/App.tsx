@@ -1,12 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
+import CommunityPage from "./pages/CommunityPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" />
+          <Route path="/" element={<div>Hello</div>} />
+          <Route path="/r/:communityId" element={<CommunityPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
