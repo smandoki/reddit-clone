@@ -19,13 +19,13 @@ function CommunityMenu({}: Props) {
           <ChevronDownIcon className="h-4 w-4 ml-auto text-gray-500" />
         </Menu.Button>
 
-        <Menu.Items className="w-[200px] rounded bg-white text-sm font-medium absolute  top-[50px]">
+        <Menu.Items className="w-[200px] rounded bg-white text-sm font-medium absolute top-[50px] border border-gray-200">
           <Menu.Item>
             {({ active }) => (
               <div
                 className={`${
                   active ? "bg-gray-100" : ""
-                } flex items-center gap-2 py-2 px-4 cursor-pointer`}
+                } flex items-center gap-2 py-2 px-4 cursor-pointer rounded`}
                 onClick={() => setOpen(true)}
               >
                 <PlusIcon className="h-5 w-5" />

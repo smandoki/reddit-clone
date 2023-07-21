@@ -12,11 +12,20 @@ import { User } from "firebase/auth";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../firebase/firebaseConfig";
 import { useAuthModalStore } from "../../../stores/authModalStore";
+import { useCommunityStore } from "../../../stores/communityStore";
 
 type Props = { user: User | null | undefined };
 
 function UserMenu({ user }: Props) {
   const { setAuthModalState } = useAuthModalStore();
+  const { setMySnippets } = useCommunityStore();
+
+  async function logout() {
+    await signOut(auth);
+
+    //clear community state
+    setMySnippets([]);
+  }
 
   return (
     <Menu>
@@ -38,7 +47,7 @@ function UserMenu({ user }: Props) {
         <ChevronDownIcon className="h-4 w-4 text-gray-500" />
       </Menu.Button>
 
-      <Menu.Items className="w-52 rounded bg-white text-sm font-medium fixed right-1 top-[50px]">
+      <Menu.Items className="w-52 rounded bg-white text-sm font-medium fixed right-1 top-[50px] border border-gray-200">
         {user && (
           <>
             <Menu.Item>
@@ -46,7 +55,7 @@ function UserMenu({ user }: Props) {
                 <div
                   className={`${
                     active ? "bg-gray-100" : ""
-                  } flex items-center gap-2 py-2 px-4 cursor-pointer`}
+                  } flex items-center gap-2 py-2 px-4 cursor-pointer rounded`}
                 >
                   <UserCircleIcon className="w-5 h-5" />
                   Profile
@@ -62,8 +71,8 @@ function UserMenu({ user }: Props) {
                 <div
                   className={`${
                     active ? "bg-gray-100" : ""
-                  } flex items-center gap-2 py-2 px-4 cursor-pointer`}
-                  onClick={() => signOut(auth)}
+                  } flex items-center gap-2 py-2 px-4 cursor-pointer rounded`}
+                  onClick={logout}
                 >
                   <ArrowRightOnRectangleIcon className="w-5 h-5" />
                   Log Out
@@ -79,7 +88,7 @@ function UserMenu({ user }: Props) {
               <div
                 className={`${
                   active ? "bg-gray-100" : ""
-                } flex items-center gap-2 py-2 px-4 cursor-pointer`}
+                } flex items-center gap-2 py-2 px-4 cursor-pointer rounded`}
                 onClick={() => setAuthModalState(true, "login")}
               >
                 <ArrowRightOnRectangleIcon className="w-5 h-5" />

@@ -1,11 +1,15 @@
-import { Community } from "../../stores/communityStore";
+import { Community, useCommunityData } from "../../stores/communityStore";
+import LoadingButton from "../LoadingButton";
 
 type Props = {
   communityData: Community;
 };
 
 function Header({ communityData }: Props) {
-  const isJoined = false;
+  const { mySnippets, onJoinOrLeaveCommunity, loading } = useCommunityData();
+  const isJoined = !!mySnippets.find(
+    (snippet) => communityData.id === snippet.communityId
+  );
 
   return (
     <div className="flex flex-col w-full h-[146px]">
@@ -30,12 +34,15 @@ function Header({ communityData }: Props) {
               </p>
             </div>
 
-            <button
-              onClick={() => {}}
-              className="flex items-center bg-blue-500 text-white px-6 py-1 rounded-full h-[30px] text-center hover:brightness-95 active:brightness-90"
+            <LoadingButton
+              isLoading={loading}
+              onClick={() => onJoinOrLeaveCommunity(communityData, isJoined)}
+              className={`flex items-center px-6 py-1 rounded-full h-[30px] font-medium text-center border border-blue-500 hover:brightness-95 active:brightness-90 ${
+                isJoined ? "bg-white text-blue-500" : "bg-blue-500 text-white"
+              }`}
             >
               {isJoined ? "Joined" : "Join"}
-            </button>
+            </LoadingButton>
           </div>
         </div>
       </div>
