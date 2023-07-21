@@ -14,8 +14,7 @@ function OAuthButtons({}: Props) {
   async function createUserDocument(user: User) {
     await setDoc(
       doc(firestore, "users", user.uid),
-      JSON.parse(JSON.stringify({ user })),
-      { merge: true }
+      JSON.parse(JSON.stringify({ user }))
     );
   }
 

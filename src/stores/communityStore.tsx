@@ -10,6 +10,7 @@ import { create } from "zustand";
 import { useState, useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore } from "../firebase/firebaseConfig";
+import { useAuthModalStore } from "./authModalStore";
 
 export interface Community {
   id: string;
@@ -45,9 +46,14 @@ export function useCommunityData() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [user] = useAuthState(auth);
+  const { setAuthModalState } = useAuthModalStore();
 
   function onJoinOrLeaveCommunity(communityData: Community, isJoined: boolean) {
-    //check if the user signed in
+    //user must be signed in before they can join
+    if (!user) {
+      setAuthModalState(true, "login");
+      return;
+    }
 
     if (isJoined) {
       leaveCommunity(communityData.id);
