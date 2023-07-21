@@ -4,7 +4,7 @@ import { auth, firestore } from "../../../firebase/firebaseConfig";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { FIREBASE_ERRORS } from "../../../firebase/errors";
 import { User } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 type Props = {};
 
@@ -38,8 +38,7 @@ function Signup({}: Props) {
   async function createUserDocument(user: User) {
     await setDoc(
       doc(firestore, "users", user.uid),
-      JSON.parse(JSON.stringify(user)),
-      { merge: true }
+      JSON.parse(JSON.stringify(user))
     );
   }
 

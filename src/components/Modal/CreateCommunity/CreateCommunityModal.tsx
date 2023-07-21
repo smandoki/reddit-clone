@@ -8,7 +8,13 @@ import {
 import { useState } from "react";
 import LoadingButton from "../../LoadingButton";
 import { auth, firestore } from "../../../firebase/firebaseConfig";
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  runTransaction,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 type Props = {
@@ -66,18 +72,34 @@ function CreateCommunityModal({ open, handleClose }: Props) {
     try {
       //check community name is not taken
       const communityDocRef = doc(firestore, "communities", communityForm.name);
-      const communityDoc = await getDoc(communityDocRef);
 
-      if (communityDoc.exists()) {
-        throw new Error("Community name is already taken. Try another.");
-      }
+      await runTransaction(firestore, async (transaction) => {
+        const communityDoc = await transaction.get(communityDocRef);
 
-      //create community
-      await setDoc(communityDocRef, {
-        creatorId: user?.uid,
-        createdAt: serverTimestamp(),
-        numberOfMembers: 1,
-        privacyType: communityForm.type,
+        if (communityDoc.exists()) {
+          throw new Error("Community name is already taken. Try another.");
+        }
+
+        //create community
+        transaction.set(communityDocRef, {
+          creatorId: user?.uid,
+          createdAt: serverTimestamp(),
+          numberOfMembers: 1,
+          privacyType: communityForm.type,
+        });
+
+        //create community snippet on user
+        transaction.set(
+          doc(
+            firestore,
+            `users/${user?.uid}/communitySnippets`,
+            communityForm.name
+          ),
+          {
+            communityId: communityForm.name,
+            isModerator: true,
+          }
+        );
       });
     } catch (error: any) {
       console.log("handleCreateCommunity error", error);

@@ -23,9 +23,13 @@ function Navbar({}: Props) {
           className="h-12 hidden md:inline-flex"
         />
       </div>
-      {user && <CommunityMenu />}
-      <SearchInput user={user} />
-      <RightContent user={user} />
+      {!loading && (
+        <>
+          {user && <CommunityMenu />}
+          <SearchInput user={user} />
+          <RightContent user={user} />
+        </>
+      )}
     </header>
   );
 }
