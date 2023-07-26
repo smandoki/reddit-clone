@@ -1,9 +1,5 @@
 import { Menu } from "@headlessui/react";
-import {
-  ChevronDownIcon,
-  UserIcon,
-  SparklesIcon,
-} from "@heroicons/react/24/solid";
+import { ChevronDownIcon, SparklesIcon } from "@heroicons/react/24/solid";
 import {
   ArrowRightOnRectangleIcon,
   UserCircleIcon,
@@ -12,25 +8,17 @@ import { User } from "firebase/auth";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../firebase/firebaseConfig";
 import { useAuthModalStore } from "../../../stores/authModalStore";
-import { useCommunityStore } from "../../../stores/communityStore";
+import RedditAvatar from "../../RedditAvatar";
 
 type Props = { user: User | null | undefined };
 
 function UserMenu({ user }: Props) {
   const { setAuthModalState } = useAuthModalStore();
-  const { setMySnippets } = useCommunityStore();
-
-  async function logout() {
-    await signOut(auth);
-
-    //clear community state
-    setMySnippets([]);
-  }
 
   return (
     <Menu>
       <Menu.Button className="min-w-max flex items-center gap-1.5 border border-transparent hover:border-gray-200 py-1 px-2 my-[3px] rounded">
-        <UserIcon className="h-8 w-8 bg-gray-300 p-[2px] text-white rounded" />
+        <RedditAvatar className="h-8 w-8 fill-white bg-gray-300 p-[2px] rounded" />
 
         {user && (
           <div className="flex-col gap-1 hidden md:flex mr-2 text-left font-semibold">
@@ -72,7 +60,7 @@ function UserMenu({ user }: Props) {
                   className={`${
                     active ? "bg-gray-100" : ""
                   } flex items-center gap-2 py-2 px-4 cursor-pointer rounded`}
-                  onClick={logout}
+                  onClick={() => signOut(auth)}
                 >
                   <ArrowRightOnRectangleIcon className="w-5 h-5" />
                   Log Out

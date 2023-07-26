@@ -1,5 +1,6 @@
 import { Community, useCommunityData } from "../../stores/communityStore";
 import LoadingButton from "../LoadingButton";
+import RedditFace from "../RedditFace";
 
 type Props = {
   communityData: Community;
@@ -16,15 +17,7 @@ function Header({ communityData }: Props) {
       <div className="h-1/2 bg-blue-400"></div>
       <div className="flex justify-center bg-white grow">
         <div className="flex w-[95%] max-w-[860px]">
-          <img
-            src={
-              communityData.imageURL
-                ? communityData.imageURL
-                : "/images/redditFace.svg"
-            }
-            alt="community logo"
-            className="h-[64px] w-[64px] relative -top-3 border-[4px] border-white rounded-full"
-          />
+          <RedditFace className="h-[64px] w-[64px] relative -top-3 border-[4px] border-white rounded-full fill-blue-500" />
 
           <div className="flex px-[16px] py-[10px]">
             <div className="flex flex-col mr-6">

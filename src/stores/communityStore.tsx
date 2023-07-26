@@ -40,7 +40,7 @@ export const useCommunityStore = create<CommunityState>()((set) => ({
     })),
 }));
 
-//custom hook for handling community state
+//custom hook for handling community data
 export function useCommunityData() {
   const { mySnippets, setMySnippets } = useCommunityStore();
   const [loading, setLoading] = useState(false);
@@ -84,6 +84,8 @@ export function useCommunityData() {
   useEffect(() => {
     if (user) {
       getMySnippets();
+    } else {
+      setMySnippets([]);
     }
   }, [user]);
 
@@ -95,6 +97,7 @@ export function useCommunityData() {
       //create new community snippet
       const newSnippet: CommunitySnippet = {
         communityId: communityData.id,
+        isModerator: user?.uid === communityData.creatorId,
         imageURL: communityData.imageURL || "",
       };
 
