@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import CommunityPage from "./pages/CommunityPage";
-import Submit from "./components/Community/submit";
+import Submit from "./components/Community/Submit";
 
 function App() {
   return (

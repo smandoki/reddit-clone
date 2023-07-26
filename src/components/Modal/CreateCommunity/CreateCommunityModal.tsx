@@ -8,14 +8,10 @@ import {
 import { useState } from "react";
 import LoadingButton from "../../LoadingButton";
 import { auth, firestore } from "../../../firebase/firebaseConfig";
-import {
-  doc,
-  getDoc,
-  runTransaction,
-  serverTimestamp,
-  setDoc,
-} from "firebase/firestore";
+import { doc, runTransaction, serverTimestamp } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useNavigate } from "react-router-dom";
+import { useCommunityData } from "../../../stores/communityStore";
 
 type Props = {
   open: boolean;
@@ -36,6 +32,8 @@ function CreateCommunityModal({ open, handleClose }: Props) {
   const [error, setError] = useState("");
   const [user] = useAuthState(auth);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { getMySnippets } = useCommunityData();
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     console.log(e.target.name, e.target.value);
@@ -47,6 +45,7 @@ function CreateCommunityModal({ open, handleClose }: Props) {
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    handleCreateCommunity();
   }
 
   function onClose() {
@@ -101,6 +100,11 @@ function CreateCommunityModal({ open, handleClose }: Props) {
           }
         );
       });
+
+      //once community is created, update snippets, close modal, and redirect to community
+      getMySnippets();
+      onClose();
+      navigate(`/r/${communityForm.name}`);
     } catch (error: any) {
       console.log("handleCreateCommunity error", error);
       setError(error.message);
@@ -148,6 +152,7 @@ function CreateCommunityModal({ open, handleClose }: Props) {
                 <input
                   type="text"
                   name="name"
+                  disabled={loading}
                   minLength={3}
                   maxLength={21}
                   required
@@ -179,6 +184,7 @@ function CreateCommunityModal({ open, handleClose }: Props) {
                     name="type"
                     value="public"
                     id="public"
+                    disabled={loading}
                     className="cursor-pointer"
                     checked={communityForm.type === "public"}
                     onChange={onChange}
@@ -204,6 +210,7 @@ function CreateCommunityModal({ open, handleClose }: Props) {
                     name="type"
                     value="restricted"
                     id="restricted"
+                    disabled={loading}
                     className="cursor-pointer"
                     checked={communityForm.type === "restricted"}
                     onChange={onChange}
@@ -229,6 +236,7 @@ function CreateCommunityModal({ open, handleClose }: Props) {
                     name="type"
                     value="private"
                     id="private"
+                    disabled={loading}
                     className="cursor-pointer"
                     checked={communityForm.type === "private"}
                     onChange={onChange}
@@ -275,7 +283,6 @@ function CreateCommunityModal({ open, handleClose }: Props) {
                 type="submit"
                 isLoading={loading}
                 className="text-sm font-semibold text-white bg-blue-500 border-2 border-blue-500 rounded-full px-4 py-1 min-w-[164px] hover:brightness-95 active:brightness-90"
-                onClick={handleCreateCommunity}
               >
                 Create Community
               </LoadingButton>
