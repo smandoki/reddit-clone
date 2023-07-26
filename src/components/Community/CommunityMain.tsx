@@ -1,5 +1,6 @@
 import { Community } from "../../stores/communityStore";
 import PageContent from "../Layout/PageContent";
+import CreatePostLink from "./CreatePostLink";
 import Header from "./Header";
 
 type Props = {
@@ -12,8 +13,7 @@ function CommunityMain({ communityData }: Props) {
       <Header communityData={communityData} />
       <PageContent>
         <>
-          <div>LEFT1</div>
-          <div>LEFT2</div>
+          <CreatePostLink />
         </>
         <>
           <div>RIGHT1</div>
