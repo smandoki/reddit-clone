@@ -13,13 +13,13 @@ function CreatePostLink({}: Props) {
   const [user] = useAuthState(auth);
   const { setAuthModalState } = useAuthModalStore();
 
-  function onClick() {
+  function onClick(query?: string) {
     if (!user) {
       setAuthModalState(true, "login");
       return;
     }
 
-    navigate(`/r/${communityId}/submit`);
+    navigate(`/r/${communityId}/submit${query ? "?" + query : ""}`);
   }
 
   return (
@@ -27,15 +27,17 @@ function CreatePostLink({}: Props) {
       <RedditAvatar className="h-[38px] w-[38px] rounded-full bg-gray-300 fill-white border-gray-200 border-2" />
       <input
         type="text"
-        onClick={onClick}
+        onClick={() => onClick()}
         placeholder="Create Post"
         className="h-[38px] grow bg-gray-50 placeholder:text-gray-500 p-2 rounded border border-gray-200 hover:bg-white focus:bg-white hover:border-blue-500 focus:border-blue-500 outline-none"
       />
       <PhotoIcon
+        onClick={() => onClick("media")}
         title="Create Media Post"
         className="p-1.5 h-[36px] w-[36px] text-gray-400 hover:bg-gray-200 rounded active:brightness-95"
       />
       <LinkIcon
+        onClick={() => onClick("url")}
         title="Post a Link"
         className="p-1.5 h-[36px] w-[36px] text-gray-400 hover:bg-gray-200 rounded active:brightness-95"
       />
