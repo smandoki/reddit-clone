@@ -36,7 +36,6 @@ function CreateCommunityModal({ open, handleClose }: Props) {
   const { getMySnippets } = useCommunityData();
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-    console.log(e.target.name, e.target.value);
     setCommunityForm((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
@@ -124,7 +123,7 @@ function CreateCommunityModal({ open, handleClose }: Props) {
           {/* modal header */}
           <div className="w-full flex justify-between items-center mb-3 px-4">
             <Dialog.Title className="text-xl font-bold">
-              <h1 className="text-[16px] font-semibold">Create a Community</h1>
+              <p className="text-[16px] font-semibold">Create a Community</p>
             </Dialog.Title>
             <XMarkIcon
               className="h-5 w-5 text-gray-500 cursor-pointer"
