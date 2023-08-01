@@ -5,8 +5,9 @@ import {
 } from "@heroicons/react/24/outline";
 import { Tab } from "@headlessui/react";
 import { useSearchParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TextInputs from "./PostForm/TextInputs";
+import ImageUpload from "./PostForm/ImageUpload";
 
 type Props = {};
 
@@ -18,30 +19,44 @@ function NewPostForm({}: Props) {
   });
   const [selectedFile, setSelectedFile] = useState<string>();
   const [loading, setLoading] = useState(false);
+  const [selectedTab, setSelectedTab] = useState(0);
 
-  function getTabIndex() {
-    if ("media" in Object.fromEntries(urlSearchParams)) return 1;
-    if ("url" in Object.fromEntries(urlSearchParams)) return 2;
-    return 0;
+  useEffect(() => {
+    if ("media" in Object.fromEntries(urlSearchParams)) setSelectedTab(1);
+    if ("url" in Object.fromEntries(urlSearchParams)) setSelectedTab(2);
+  }, []);
+
+  async function handleCreatePost() {
+    setLoading(true);
   }
 
-  async function handleCreatePost() {}
+  function onSelectImage(event: React.ChangeEvent<HTMLInputElement>) {
+    const reader = new FileReader();
 
-  function onSelectImage() {}
+    if (event.target.files?.[0]) {
+      reader.readAsDataURL(event.target.files[0]);
+    }
+
+    reader.onload = (readerEvent) => {
+      if (readerEvent.target?.result) {
+        setSelectedFile(readerEvent.target.result as string);
+      }
+    };
+  }
 
   function onTextChange(
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
     const { name, value } = event.target;
     setTextInputs((prev) => ({
-      ...textInputs,
+      ...prev,
       [name]: value,
     }));
   }
 
   return (
     <div className="flex flex-col bg-white rounded mt-2">
-      <Tab.Group defaultIndex={getTabIndex()}>
+      <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
         <Tab.List className="flex justify-between">
           <Tab className="flex w-1/3 rounded-tl">
             {({ selected }) => (
@@ -96,7 +111,14 @@ function NewPostForm({}: Props) {
               loading={loading}
             />
           </Tab.Panel>
-          <Tab.Panel>Images & Video</Tab.Panel>
+          <Tab.Panel>
+            <ImageUpload
+              onSelectImage={onSelectImage}
+              selectedFile={selectedFile}
+              setSelectedTab={setSelectedTab}
+              setSelectedFile={setSelectedFile}
+            />
+          </Tab.Panel>
           <Tab.Panel>Link</Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
