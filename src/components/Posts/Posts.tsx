@@ -60,7 +60,7 @@ function Posts({ communityData }: Props) {
               post={post}
               userIsCreator={user?.uid === post.creatorId}
               onVote={onVote}
-              onDelete={onDeletePost}
+              onDeletePost={onDeletePost}
               onSelectPost={onSelectPost}
               userVoteValue={undefined}
             />

@@ -1,5 +1,7 @@
-import { Timestamp } from "firebase/firestore";
+import { Timestamp, deleteDoc, doc } from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
 import { create } from "zustand";
+import { firestore, storage } from "../firebase/firebaseConfig";
 
 export type Post = {
   id?: string;
@@ -37,7 +39,24 @@ export function usePosts() {
 
   function onSelectPost() {}
 
-  async function onDeletePost() {}
+  async function onDeletePost(post: Post): Promise<boolean> {
+    try {
+      if (post.imageURL) {
+        const imageRef = ref(storage, `posts/${post.id}/image`);
+        await deleteObject(imageRef);
+      }
+
+      const postDocRef = doc(firestore, "posts", post.id!);
+      await deleteDoc(postDocRef);
+
+      setPosts(posts.filter((item) => item.id !== post.id));
+    } catch (error: any) {
+      console.log("onDeletePost", error.message);
+      return false;
+    }
+
+    return true;
+  }
 
   return {
     posts,

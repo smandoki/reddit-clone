@@ -3,6 +3,7 @@ import { auth } from "../../firebase/firebaseConfig";
 import RightContent from "./RightContent/RightContent";
 import SearchInput from "./SearchInput";
 import CommunityMenu from "./CommunityMenu/CommunityMenu";
+import { Link } from "react-router-dom";
 
 type Props = {};
 
@@ -11,7 +12,7 @@ function Navbar({}: Props) {
 
   return (
     <header className="flex gap-[2px] h-12 px-2 bg-white justify-between">
-      <div className="flex items-center md:min-w-max">
+      <Link to="/" className="flex items-center md:min-w-max">
         <img
           src="/images/redditFace.svg"
           alt="reddit logo"
@@ -22,7 +23,7 @@ function Navbar({}: Props) {
           alt="reddit title"
           className="h-12 hidden md:inline-flex"
         />
-      </div>
+      </Link>
       {!loading && (
         <>
           {user && <CommunityMenu />}

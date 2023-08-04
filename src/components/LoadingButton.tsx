@@ -5,8 +5,9 @@ type Props = {
   className?: string;
   isLoading?: boolean;
   children?: ReactNode;
-  onClick?: () => void;
+  onClick?: any;
   disabled?: boolean;
+  title?: string;
 };
 
 function LoadingButton({
@@ -16,9 +17,11 @@ function LoadingButton({
   children,
   onClick,
   disabled,
+  title,
 }: Props) {
   return (
     <button
+      title={title}
       type={type}
       disabled={disabled}
       onClick={onClick}
