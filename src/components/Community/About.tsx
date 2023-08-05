@@ -41,6 +41,7 @@ function About({ communityData }: Props) {
     }
 
     setUploadingImage(false);
+    setSelectedFile("");
   }
 
   return (
@@ -95,9 +96,9 @@ function About({ communityData }: Props) {
                 >
                   Change Image
                 </p>
-                {communityData.imageURL || selectedFile ? (
+                {currentCommunity?.imageURL || selectedFile ? (
                   <img
-                    src={selectedFile || communityData.imageURL}
+                    src={selectedFile || currentCommunity?.imageURL}
                     alt="Community Image"
                     className="rounded-full h-[40px] w-[40px] object-cover"
                   />

@@ -1,7 +1,15 @@
-import { Timestamp, deleteDoc, doc } from "firebase/firestore";
+import {
+  Timestamp,
+  collection,
+  deleteDoc,
+  doc,
+  writeBatch,
+} from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import { create } from "zustand";
-import { firestore, storage } from "../firebase/firebaseConfig";
+import { auth, firestore, storage } from "../firebase/firebaseConfig";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuthModalStore } from "./authModalStore";
 
 export type Post = {
   id?: string;
@@ -17,10 +25,19 @@ export type Post = {
   communityImageUrl?: string;
 };
 
+export type PostVote = {
+  id: string;
+  postId: string;
+  communityId: string;
+  voteValue: number;
+};
+
 interface PostState {
   selectedPost: Post | null;
   posts: Post[];
   setPosts: (posts: Post[]) => void;
+  postVotes: PostVote[];
+  setPostVotes: (postVotes: PostVote[]) => void;
 }
 
 export const usePostStore = create<PostState>()((set) => ({
@@ -30,12 +47,99 @@ export const usePostStore = create<PostState>()((set) => ({
     set({
       posts,
     }),
+  postVotes: [],
+  setPostVotes: (postVotes: PostVote[]) =>
+    set({
+      postVotes,
+    }),
 }));
 
 export function usePosts() {
-  const { posts, setPosts } = usePostStore();
+  const { posts, setPosts, postVotes, setPostVotes } = usePostStore();
+  const [user] = useAuthState(auth);
+  const { setAuthModalState } = useAuthModalStore();
 
-  async function onVote() {}
+  async function onVote(post: Post, vote: number, communityId: string) {
+    if (!user) {
+      setAuthModalState(true, "login");
+      return;
+    }
+
+    try {
+      const { voteStatus } = post;
+      const existingVote = postVotes.find(
+        (postVote) => postVote.postId === post.id
+      );
+
+      const batch = writeBatch(firestore);
+      const updatedPost = { ...post };
+      const updatedPosts = [...posts];
+      let updatedPostVotes = [...postVotes];
+      let voteChange = vote;
+
+      if (!existingVote) {
+        const postVoteRef = doc(
+          collection(firestore, "users", `${user.uid}/postVotes`)
+        );
+
+        const newVote: PostVote = {
+          id: postVoteRef.id,
+          postId: post.id!,
+          communityId,
+          voteValue: vote,
+        };
+
+        batch.set(postVoteRef, newVote);
+
+        updatedPost.voteStatus = voteStatus + vote;
+        updatedPostVotes = [...updatedPostVotes, newVote];
+      } else {
+        const postVoteRef = doc(
+          firestore,
+          "users",
+          `${user.uid}/postVotes/${existingVote.id}`
+        );
+
+        if (existingVote.voteValue === vote) {
+          updatedPost.voteStatus = voteStatus - vote;
+          updatedPostVotes = updatedPostVotes.filter(
+            (vote) => vote.id !== existingVote.id
+          );
+
+          batch.delete(postVoteRef);
+
+          voteChange *= -1;
+        } else {
+          updatedPost.voteStatus = voteStatus + 2 * vote;
+
+          const voteIndex = postVotes.findIndex(
+            (vote) => vote.id === existingVote.id
+          );
+          updatedPostVotes[voteIndex] = {
+            ...existingVote,
+            voteValue: vote,
+          };
+
+          batch.update(postVoteRef, { voteValue: vote });
+
+          voteChange = 2 * vote;
+        }
+      }
+
+      const postRef = doc(firestore, "posts", post.id!);
+      batch.update(postRef, { voteStatus: voteStatus + voteChange });
+
+      await batch.commit();
+
+      const postIndex = posts.findIndex((item) => item.id === post.id);
+      updatedPosts[postIndex] = updatedPost;
+
+      setPosts(updatedPosts);
+      setPostVotes(updatedPostVotes);
+    } catch (error: any) {
+      console.log("onVote error", error.message);
+    }
+  }
 
   function onSelectPost() {}
 
@@ -60,6 +164,7 @@ export function usePosts() {
 
   return {
     posts,
+    postVotes,
     setPosts,
     onVote,
     onSelectPost,

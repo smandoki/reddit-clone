@@ -20,7 +20,7 @@ type Props = {
   post: Post;
   userIsCreator: boolean;
   userVoteValue?: number;
-  onVote: () => {};
+  onVote: (post: Post, vote: number, communityId: string) => void;
   onDeletePost: (post: Post) => Promise<boolean>;
   onSelectPost: () => void;
 };
@@ -62,12 +62,12 @@ function PostItem({
       <div className="flex flex-col items-center bg-gray-100 p-2 w-[40px] rounded-tl rounded-bl">
         {userVoteValue === 1 ? (
           <ArrowUpCircleIconSolid
-            onClick={onVote}
+            onClick={() => onVote(post, 1, post.communityId)}
             className="text-brand-100 cursor-pointer hover:bg-gray-300 rounded"
           />
         ) : (
           <ArrowUpCircleIcon
-            onClick={onVote}
+            onClick={() => onVote(post, 1, post.communityId)}
             className="text-gray-500 cursor-pointer hover:bg-gray-300 rounded"
           />
         )}
@@ -76,12 +76,12 @@ function PostItem({
 
         {userVoteValue === -1 ? (
           <ArrowDownCircleIconSolid
-            onClick={onVote}
-            className="text-brand-100 cursor-pointer hover:bg-gray-300"
+            onClick={() => onVote(post, -1, post.communityId)}
+            className="text-blue-700 cursor-pointer hover:bg-gray-300"
           />
         ) : (
           <ArrowDownCircleIcon
-            onClick={onVote}
+            onClick={() => onVote(post, -1, post.communityId)}
             className="text-gray-500 cursor-pointer hover:bg-gray-300 rounded"
           />
         )}

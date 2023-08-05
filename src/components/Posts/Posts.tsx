@@ -13,7 +13,8 @@ type Props = {
 
 function Posts({ communityData }: Props) {
   const [loading, setLoading] = useState(false);
-  const { posts, setPosts, onVote, onDeletePost, onSelectPost } = usePosts();
+  const { posts, setPosts, onVote, onDeletePost, onSelectPost, postVotes } =
+    usePosts();
   const [user] = useAuthState(auth);
 
   async function getPosts() {
@@ -62,7 +63,9 @@ function Posts({ communityData }: Props) {
               onVote={onVote}
               onDeletePost={onDeletePost}
               onSelectPost={onSelectPost}
-              userVoteValue={undefined}
+              userVoteValue={
+                postVotes.find((vote) => vote.postId === post.id)?.voteValue
+              }
             />
           ))}
         </div>
