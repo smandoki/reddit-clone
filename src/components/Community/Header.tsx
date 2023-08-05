@@ -1,4 +1,8 @@
-import { Community, useCommunityData } from "../../stores/communityStore";
+import {
+  Community,
+  useCommunityData,
+  useCommunityStore,
+} from "../../stores/communityStore";
 import LoadingButton from "../LoadingButton";
 import RedditFace from "../RedditFace";
 
@@ -11,13 +15,22 @@ function Header({ communityData }: Props) {
   const isJoined = !!mySnippets.find(
     (snippet) => communityData.id === snippet.communityId
   );
+  const { currentCommunity } = useCommunityStore();
 
   return (
     <div className="flex flex-col w-full h-[146px]">
       <div className="h-1/2 bg-blue-400"></div>
       <div className="flex justify-center bg-white grow">
         <div className="flex w-[95%] max-w-[860px]">
-          <RedditFace className="h-[64px] w-[64px] relative -top-3 border-[4px] border-white rounded-full fill-blue-500" />
+          {currentCommunity?.imageURL ? (
+            <img
+              src={currentCommunity.imageURL}
+              alt="Community Picture"
+              className="h-[64px] w-[64px] relative -top-3 border-[4px] border-white rounded-full object-cover"
+            />
+          ) : (
+            <RedditFace className="h-[64px] w-[64px] relative -top-3 border-[4px] border-white rounded-full fill-blue-500" />
+          )}
 
           <div className="flex px-[16px] py-[10px]">
             <div className="flex flex-col mr-6">

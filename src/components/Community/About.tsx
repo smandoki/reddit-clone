@@ -99,7 +99,7 @@ function About({ communityData }: Props) {
                   <img
                     src={selectedFile || communityData.imageURL}
                     alt="Community Image"
-                    className="rounded-full h-[40px] w-[40px]"
+                    className="rounded-full h-[40px] w-[40px] object-cover"
                   />
                 ) : (
                   <RedditFace className="rounded-full fill-blue-500 h-[40px] w-[40px]" />
