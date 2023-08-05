@@ -189,10 +189,14 @@ export function usePosts() {
   useEffect(() => {
     if (currentCommunity?.id && user) {
       getPostVotes(currentCommunity.id);
-    } else {
-      setPostVotes([]);
     }
   }, [currentCommunity, user]);
+
+  useEffect(() => {
+    if (!user) {
+      setPostVotes([]);
+    }
+  }, [user]);
 
   return {
     posts,
