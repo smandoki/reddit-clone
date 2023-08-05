@@ -3,6 +3,9 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDocs,
+  query,
+  where,
   writeBatch,
 } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
@@ -10,6 +13,8 @@ import { create } from "zustand";
 import { auth, firestore, storage } from "../firebase/firebaseConfig";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useAuthModalStore } from "./authModalStore";
+import { useCommunityStore } from "./communityStore";
+import { useEffect } from "react";
 
 export type Post = {
   id?: string;
@@ -58,6 +63,7 @@ export function usePosts() {
   const { posts, setPosts, postVotes, setPostVotes } = usePostStore();
   const [user] = useAuthState(auth);
   const { setAuthModalState } = useAuthModalStore();
+  const { currentCommunity } = useCommunityStore();
 
   async function onVote(post: Post, vote: number, communityId: string) {
     if (!user) {
@@ -141,6 +147,24 @@ export function usePosts() {
     }
   }
 
+  async function getPostVotes(communityId: string) {
+    const postVotesQuery = query(
+      collection(firestore, "users", `${user?.uid}/postVotes`),
+      where("communityId", "==", communityId)
+    );
+
+    const postVoteDocs = await getDocs(postVotesQuery);
+    const postVotes = postVoteDocs.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        } as PostVote)
+    );
+
+    setPostVotes(postVotes);
+  }
+
   function onSelectPost() {}
 
   async function onDeletePost(post: Post): Promise<boolean> {
@@ -162,6 +186,14 @@ export function usePosts() {
     return true;
   }
 
+  useEffect(() => {
+    if (currentCommunity?.id && user) {
+      getPostVotes(currentCommunity.id);
+    } else {
+      setPostVotes([]);
+    }
+  }, [currentCommunity, user]);
+
   return {
     posts,
     postVotes,
@@ -169,5 +201,6 @@ export function usePosts() {
     onVote,
     onSelectPost,
     onDeletePost,
+    getPostVotes,
   };
 }
