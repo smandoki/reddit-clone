@@ -20,6 +20,7 @@ import {
 } from "firebase/firestore";
 import { firestore, storage } from "../../firebase/firebaseConfig";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import useSelectFile from "../../hooks/useSelectFile";
 
 type Props = {
   user: User;
@@ -31,12 +32,12 @@ function NewPostForm({ user }: Props) {
     title: "",
     body: "",
   });
-  const [selectedFile, setSelectedFile] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
   const params = useParams();
   const navigate = useNavigate();
   const [error, setError] = useState(false);
+  const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
 
   useEffect(() => {
     if ("media" in Object.fromEntries(urlSearchParams)) setSelectedTab(1);
@@ -79,20 +80,6 @@ function NewPostForm({ user }: Props) {
     }
 
     setLoading(false);
-  }
-
-  function onSelectImage(event: React.ChangeEvent<HTMLInputElement>) {
-    const reader = new FileReader();
-
-    if (event.target.files?.[0]) {
-      reader.readAsDataURL(event.target.files[0]);
-    }
-
-    reader.onload = (readerEvent) => {
-      if (readerEvent.target?.result) {
-        setSelectedFile(readerEvent.target.result as string);
-      }
-    };
   }
 
   function onTextChange(
@@ -164,7 +151,7 @@ function NewPostForm({ user }: Props) {
           </Tab.Panel>
           <Tab.Panel>
             <ImageUpload
-              onSelectImage={onSelectImage}
+              onSelectImage={onSelectFile}
               selectedFile={selectedFile}
               setSelectedTab={setSelectedTab}
               setSelectedFile={setSelectedFile}

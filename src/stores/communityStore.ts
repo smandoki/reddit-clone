@@ -30,6 +30,8 @@ export interface CommunitySnippet {
 export interface CommunityState {
   mySnippets: CommunitySnippet[];
   setMySnippets: (snippets: CommunitySnippet[]) => void;
+  currentCommunity?: Community;
+  setCurrentCommunity: (community: Community) => void;
 }
 
 export const useCommunityStore = create<CommunityState>()((set) => ({
@@ -38,6 +40,9 @@ export const useCommunityStore = create<CommunityState>()((set) => ({
     set(() => ({
       mySnippets: snippets.map((snippet) => ({ ...snippet })),
     })),
+  currentCommunity: undefined,
+  setCurrentCommunity: (community: Community) =>
+    set({ currentCommunity: community }),
 }));
 
 //custom hook for handling community data
