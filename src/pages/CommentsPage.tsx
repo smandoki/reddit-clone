@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import About from "../components/Community/About";
 import { useCommunityData } from "../stores/communityStore";
+import Comments from "../components/Posts/Comments/Comments";
 
 type Props = {};
 
@@ -54,6 +55,12 @@ function CommentsPage({}: Props) {
             }
           />
         )}
+
+        <Comments
+          user={user}
+          selectedPost={selectedPost}
+          communityId={currentCommunity?.id}
+        />
       </>
       <>{currentCommunity && <About communityData={currentCommunity} />}</>
     </PageContent>
