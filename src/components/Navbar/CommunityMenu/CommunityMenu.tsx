@@ -19,7 +19,7 @@ function CommunityMenu({}: Props) {
           <ChevronDownIcon className="h-4 w-4 ml-auto text-gray-500" />
         </Menu.Button>
 
-        <Menu.Items className="w-[200px] rounded bg-white text-sm font-medium absolute top-[50px] border border-gray-200">
+        <Menu.Items className="z-50 w-[200px] rounded bg-white text-sm font-medium absolute top-[50px] border border-gray-200">
           <Menu.Item>
             {({ active }) => (
               <div

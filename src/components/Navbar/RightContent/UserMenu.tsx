@@ -35,7 +35,7 @@ function UserMenu({ user }: Props) {
         <ChevronDownIcon className="h-4 w-4 text-gray-500" />
       </Menu.Button>
 
-      <Menu.Items className="w-52 rounded bg-white text-sm font-medium fixed right-1 top-[50px] border border-gray-200">
+      <Menu.Items className="z-50 w-52 rounded bg-white text-sm font-medium fixed right-1 top-[50px] border border-gray-200">
         {user && (
           <>
             <Menu.Item>
