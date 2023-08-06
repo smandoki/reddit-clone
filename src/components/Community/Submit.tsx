@@ -2,13 +2,14 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import PageContent from "../Layout/PageContent";
 import NewPostForm from "../Posts/NewPostForm";
 import { auth } from "../../firebase/firebaseConfig";
-import { useCommunityStore } from "../../stores/communityStore";
+import { useCommunityData } from "../../stores/communityStore";
+import About from "./About";
 
 type Props = {};
 
 function Submit({}: Props) {
   const [user] = useAuthState(auth);
-  const { currentCommunity } = useCommunityStore();
+  const { currentCommunity } = useCommunityData();
 
   return (
     <PageContent>
@@ -20,7 +21,9 @@ function Submit({}: Props) {
           {user && <NewPostForm user={user} />}
         </div>
       </>
-      <>{currentCommunity?.id}</>
+      <div className="mt-[14px]">
+        {currentCommunity && <About communityData={currentCommunity} />}
+      </div>
     </PageContent>
   );
 }

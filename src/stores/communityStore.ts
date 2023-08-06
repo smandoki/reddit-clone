@@ -2,6 +2,7 @@ import {
   Timestamp,
   collection,
   doc,
+  getDoc,
   getDocs,
   increment,
   writeBatch,
@@ -11,6 +12,7 @@ import { useState, useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore } from "../firebase/firebaseConfig";
 import { useAuthModalStore } from "./authModalStore";
+import { useParams } from "react-router-dom";
 
 export interface Community {
   id: string;
@@ -47,11 +49,13 @@ export const useCommunityStore = create<CommunityState>()((set) => ({
 
 //custom hook for handling community data
 export function useCommunityData() {
-  const { mySnippets, setMySnippets } = useCommunityStore();
+  const { mySnippets, setMySnippets, currentCommunity, setCurrentCommunity } =
+    useCommunityStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [user] = useAuthState(auth);
   const { setAuthModalState } = useAuthModalStore();
+  const params = useParams();
 
   function onJoinOrLeaveCommunity(communityData: Community, isJoined: boolean) {
     //user must be signed in before they can join
@@ -163,11 +167,35 @@ export function useCommunityData() {
     setLoading(false);
   }
 
+  async function getCommunityData(communityId: string) {
+    try {
+      const communityDocRef = doc(firestore, "communities", communityId);
+      const communityDoc = await getDoc(communityDocRef);
+
+      setCurrentCommunity({
+        id: communityDoc.id,
+        ...communityDoc.data(),
+      } as Community);
+    } catch (error: any) {
+      console.log("getCommunityData error", error.message);
+    }
+  }
+
+  useEffect(() => {
+    const { communityId } = params;
+
+    if (communityId && !currentCommunity) {
+      getCommunityData(communityId);
+    }
+  }, [params.communityId, currentCommunity]);
+
   return {
     mySnippets,
     onJoinOrLeaveCommunity,
     getMySnippets,
     loading,
     error,
+    currentCommunity,
+    setCurrentCommunity,
   };
 }

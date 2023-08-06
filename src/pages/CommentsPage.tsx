@@ -6,6 +6,8 @@ import { auth, firestore } from "../firebase/firebaseConfig";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { doc, getDoc } from "firebase/firestore";
+import About from "../components/Community/About";
+import { useCommunityData } from "../stores/communityStore";
 
 type Props = {};
 
@@ -14,6 +16,7 @@ function CommentsPage({}: Props) {
     usePosts();
   const [user] = useAuthState(auth);
   const { postId } = useParams();
+  const { currentCommunity } = useCommunityData();
 
   async function fetchPost(postId: string) {
     try {
@@ -52,7 +55,7 @@ function CommentsPage({}: Props) {
           />
         )}
       </>
-      <></>
+      <>{currentCommunity && <About communityData={currentCommunity} />}</>
     </PageContent>
   );
 }
