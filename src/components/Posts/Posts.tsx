@@ -62,7 +62,7 @@ function Posts({ communityData }: Props) {
               userIsCreator={user?.uid === post.creatorId}
               onVote={onVote}
               onDeletePost={onDeletePost}
-              onSelectPost={onSelectPost}
+              onSelectPost={() => onSelectPost(post)}
               userVoteValue={
                 postVotes.find((vote) => vote.postId === post.id)?.voteValue
               }

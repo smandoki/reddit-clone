@@ -15,6 +15,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useAuthModalStore } from "./authModalStore";
 import { useCommunityStore } from "./communityStore";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export type Post = {
   id?: string;
@@ -39,6 +40,7 @@ export type PostVote = {
 
 interface PostState {
   selectedPost: Post | null;
+  setSelectedPost: (post: Post) => void;
   posts: Post[];
   setPosts: (posts: Post[]) => void;
   postVotes: PostVote[];
@@ -47,6 +49,7 @@ interface PostState {
 
 export const usePostStore = create<PostState>()((set) => ({
   selectedPost: null,
+  setSelectedPost: (post: Post) => set({ selectedPost: post }),
   posts: [],
   setPosts: (posts: Post[]) =>
     set({
@@ -60,10 +63,18 @@ export const usePostStore = create<PostState>()((set) => ({
 }));
 
 export function usePosts() {
-  const { posts, setPosts, postVotes, setPostVotes } = usePostStore();
+  const {
+    posts,
+    setPosts,
+    postVotes,
+    setPostVotes,
+    selectedPost,
+    setSelectedPost,
+  } = usePostStore();
   const [user] = useAuthState(auth);
   const { setAuthModalState } = useAuthModalStore();
   const { currentCommunity } = useCommunityStore();
+  const navigate = useNavigate();
 
   async function onVote(post: Post, vote: number, communityId: string) {
     if (!user) {
@@ -142,6 +153,10 @@ export function usePosts() {
 
       setPosts(updatedPosts);
       setPostVotes(updatedPostVotes);
+
+      if (selectedPost) {
+        setSelectedPost(updatedPost);
+      }
     } catch (error: any) {
       console.log("onVote error", error.message);
     }
@@ -165,7 +180,10 @@ export function usePosts() {
     setPostVotes(postVotes);
   }
 
-  function onSelectPost() {}
+  function onSelectPost(post: Post) {
+    setSelectedPost(post);
+    navigate(`/r/${post.communityId}/comments/${post.id}`);
+  }
 
   async function onDeletePost(post: Post): Promise<boolean> {
     try {
@@ -201,6 +219,8 @@ export function usePosts() {
   return {
     posts,
     postVotes,
+    selectedPost,
+    setSelectedPost,
     setPosts,
     onVote,
     onSelectPost,

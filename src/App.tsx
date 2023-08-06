@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import CommunityPage from "./pages/CommunityPage";
 import Submit from "./components/Community/Submit";
+import CommentsPage from "./pages/CommentsPage";
 
 function App() {
   return (
@@ -11,6 +12,10 @@ function App() {
           <Route path="/" element={<div>Hello</div>} />
           <Route path="/r/:communityId" element={<CommunityPage />} />
           <Route path="/r/:communityId/submit" element={<Submit />} />
+          <Route
+            path="/r/:communityId/comments/:postId"
+            element={<CommentsPage />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>

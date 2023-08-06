@@ -157,7 +157,11 @@ function NewPostForm({ user }: Props) {
               setSelectedFile={setSelectedFile}
             />
           </Tab.Panel>
-          <Tab.Panel>Link</Tab.Panel>
+          <Tab.Panel>
+            <div className="w-full h-[260px] flex items-center justify-center text-gray-800">
+              Link not implemented
+            </div>
+          </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
       {error && (

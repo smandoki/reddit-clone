@@ -15,6 +15,7 @@ import {
 import moment from "moment";
 import { useState } from "react";
 import LoadingButton from "../LoadingButton";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   post: Post;
@@ -22,7 +23,7 @@ type Props = {
   userVoteValue?: number;
   onVote: (post: Post, vote: number, communityId: string) => void;
   onDeletePost: (post: Post) => Promise<boolean>;
-  onSelectPost: () => void;
+  onSelectPost?: () => void;
 };
 
 function PostItem({
@@ -35,6 +36,8 @@ function PostItem({
 }: Props) {
   const [error, setError] = useState("");
   const [awaitingDelete, setAwaitingDelete] = useState(false);
+  const singlePostPage = !onSelectPost;
+  const navigate = useNavigate();
 
   async function handleDelete(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     try {
@@ -52,22 +55,42 @@ function PostItem({
     }
 
     setAwaitingDelete(false);
+
+    if (singlePostPage) navigate(`/r/${post.communityId}`);
+  }
+
+  //allows users to upvote and downvote without selecting the post
+  function onButtonPress(e: React.MouseEvent, func: () => void) {
+    e.stopPropagation();
+    func();
   }
 
   return (
     <div
       onClick={onSelectPost}
-      className="flex border bg-white border-gray-300 rounded hover:border-gray-500 cursor-pointer"
+      className={`flex border bg-white ${
+        singlePostPage
+          ? "border-white rounded-tl rounded-tr"
+          : "border-gray-300 rounded hover:border-gray-500 cursor-pointer"
+      }`}
     >
-      <div className="flex flex-col items-center bg-gray-100 p-2 w-[40px] rounded-tl rounded-bl">
+      <div
+        className={`flex flex-col items-center p-2 w-[40px] rounded-tl  ${
+          singlePostPage ? "rounded-bl" : "bg-gray-100 "
+        }`}
+      >
         {userVoteValue === 1 ? (
           <ArrowUpCircleIconSolid
-            onClick={() => onVote(post, 1, post.communityId)}
+            onClick={(e) =>
+              onButtonPress(e, () => onVote(post, 1, post.communityId))
+            }
             className="text-brand-100 cursor-pointer hover:bg-gray-300 rounded"
           />
         ) : (
           <ArrowUpCircleIcon
-            onClick={() => onVote(post, 1, post.communityId)}
+            onClick={(e) =>
+              onButtonPress(e, () => onVote(post, 1, post.communityId))
+            }
             className="text-gray-500 cursor-pointer hover:bg-gray-300 rounded"
           />
         )}
@@ -76,12 +99,16 @@ function PostItem({
 
         {userVoteValue === -1 ? (
           <ArrowDownCircleIconSolid
-            onClick={() => onVote(post, -1, post.communityId)}
+            onClick={(e) =>
+              onButtonPress(e, () => onVote(post, -1, post.communityId))
+            }
             className="text-blue-700 cursor-pointer hover:bg-gray-300"
           />
         ) : (
           <ArrowDownCircleIcon
-            onClick={() => onVote(post, -1, post.communityId)}
+            onClick={(e) =>
+              onButtonPress(e, () => onVote(post, -1, post.communityId))
+            }
             className="text-gray-500 cursor-pointer hover:bg-gray-300 rounded"
           />
         )}
