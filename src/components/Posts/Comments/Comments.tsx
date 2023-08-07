@@ -30,6 +30,7 @@ function Comments({ user, selectedPost, communityId }: Props) {
   const [fetchLoading, setFetchLoading] = useState(true);
   const [createLoading, setCreateLoading] = useState(false);
   const { selectedPost: selectedPostInStore, setSelectedPost } = usePosts();
+  const [awaitingDelete, setAwaitingDelete] = useState("");
 
   async function onCreateComment() {
     if (!user) return;
@@ -78,7 +79,34 @@ function Comments({ user, selectedPost, communityId }: Props) {
     setCreateLoading(false);
   }
 
-  async function onDeleteComment(comment: Comment) {}
+  async function onDeleteComment(comment: Comment) {
+    setAwaitingDelete(comment.id);
+
+    try {
+      const batch = writeBatch(firestore);
+
+      const commentDocRef = doc(firestore, "comments", comment.id);
+      batch.delete(commentDocRef);
+
+      const postDocRef = doc(firestore, "posts", selectedPost?.id!);
+      batch.update(postDocRef, {
+        numberOfComments: increment(-1),
+      });
+
+      await batch.commit();
+
+      setSelectedPost({
+        ...selectedPostInStore,
+        numberOfComments: selectedPostInStore?.numberOfComments! - 1,
+      } as Post);
+
+      setComments((prev) => prev.filter((item) => item.id !== comment.id));
+    } catch (error: any) {
+      console.log("onDeleteComment", error.message);
+    }
+
+    setAwaitingDelete("");
+  }
 
   async function getPostComments() {
     try {
@@ -118,7 +146,7 @@ function Comments({ user, selectedPost, communityId }: Props) {
         />
       </div>
 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 pb-2">
         {fetchLoading ? (
           <div className="flex items-center border-t border-gray-100 justify-center w-full h-[180px]">
             <Spinner />
@@ -135,9 +163,10 @@ function Comments({ user, selectedPost, communityId }: Props) {
 
         {comments.map((comment) => (
           <CommentItem
+            key={comment.id}
             comment={comment}
             onDeleteComment={onDeleteComment}
-            awaitingDelete={false}
+            awaitingDelete={awaitingDelete}
             userId={user?.uid}
           />
         ))}

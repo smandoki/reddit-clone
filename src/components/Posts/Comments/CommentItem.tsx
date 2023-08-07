@@ -21,7 +21,7 @@ export type Comment = {
 type Props = {
   comment: Comment;
   onDeleteComment: (comment: Comment) => void;
-  awaitingDelete: boolean;
+  awaitingDelete: string;
   userId?: string;
 };
 
@@ -43,7 +43,7 @@ function CommentItem({
             {moment(new Date(comment.createdAt.seconds * 1000)).fromNow()}
           </p>
 
-          {awaitingDelete && <Spinner />}
+          {awaitingDelete === comment.id && <Spinner />}
         </div>
 
         <p className="text-sm">{comment.text}</p>
