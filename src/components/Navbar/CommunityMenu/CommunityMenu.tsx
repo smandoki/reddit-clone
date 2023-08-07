@@ -2,11 +2,14 @@ import { Menu } from "@headlessui/react";
 import { ChevronDownIcon, HomeIcon, PlusIcon } from "@heroicons/react/24/solid";
 import CreateCommunityModal from "../../Modal/CreateCommunity/CreateCommunityModal";
 import { useState } from "react";
+import { useCommunityStore } from "../../../stores/communityStore";
+import MenuListItem from "./MenuListItem";
 
 type Props = {};
 
 function CommunityMenu({}: Props) {
   const [open, setOpen] = useState(false);
+  const { mySnippets } = useCommunityStore();
 
   return (
     <div className="relative flex items-center">
@@ -20,6 +23,28 @@ function CommunityMenu({}: Props) {
         </Menu.Button>
 
         <Menu.Items className="z-50 w-[200px] rounded bg-white text-sm font-medium absolute top-[50px] border border-gray-200">
+          <div className="mt-3 mb-1">
+            <p className="pl-3 text-xs font-medium text-gray-500">MODERATING</p>
+          </div>
+
+          {mySnippets
+            .filter((item) => item.isModerator)
+            .map((snippet) => (
+              <MenuListItem
+                key={snippet.communityId}
+                displayText={`r/${snippet.communityId}`}
+                imageUrl={snippet.imageURL}
+                iconColor="blue-500"
+                link={`r/${snippet.communityId}`}
+              />
+            ))}
+
+          <div className="mt-3 mb-1">
+            <p className="pl-3 text-xs font-medium text-gray-500">
+              MY COMMUNITIES
+            </p>
+          </div>
+
           <Menu.Item>
             {({ active }) => (
               <div
@@ -33,6 +58,16 @@ function CommunityMenu({}: Props) {
               </div>
             )}
           </Menu.Item>
+
+          {mySnippets.map((snippet) => (
+            <MenuListItem
+              key={snippet.communityId}
+              displayText={`r/${snippet.communityId}`}
+              imageUrl={snippet.imageURL}
+              iconColor="blue-500"
+              link={`r/${snippet.communityId}`}
+            />
+          ))}
         </Menu.Items>
       </Menu>
     </div>

@@ -15,7 +15,7 @@ function CommunityMain({ communityData }: Props) {
 
   useEffect(() => {
     setCurrentCommunity(communityData);
-  }, []);
+  }, [communityData]);
 
   return (
     <>

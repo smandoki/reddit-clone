@@ -46,8 +46,8 @@ function Posts({ communityData }: Props) {
   }
 
   useEffect(() => {
-    getPosts();
-  }, []);
+    if (communityData) getPosts();
+  }, [communityData]);
 
   return (
     <>
