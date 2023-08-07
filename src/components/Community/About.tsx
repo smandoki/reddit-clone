@@ -40,17 +40,6 @@ function About({ communityData }: Props) {
         imageURL: downloadURL,
       });
 
-      await updateDoc(
-        doc(
-          firestore,
-          `users/${user?.uid}/communitySnippets`,
-          communityData.id
-        ),
-        {
-          imageURL: downloadURL,
-        }
-      );
-
       //update imageurl on local state
       setCurrentCommunity({ ...communityData, imageURL: downloadURL });
       setMySnippets(

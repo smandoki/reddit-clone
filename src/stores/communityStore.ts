@@ -80,8 +80,24 @@ export function useCommunityData() {
         collection(firestore, `users/${user?.uid}/communitySnippets`)
       );
 
-      const snippets = snippetDocs.docs.map((doc) => ({ ...doc.data() }));
-      setMySnippets(snippets as CommunitySnippet[]);
+      const snippets = snippetDocs.docs.map(
+        (doc) => ({ ...doc.data() } as CommunitySnippet)
+      );
+
+      //for each snippet grab latest community imageUrl
+      const snippetsWithImage: CommunitySnippet[] = [];
+
+      for await (const item of snippets) {
+        const communityDocRef = doc(firestore, "communities", item.communityId);
+        const communityDoc = await getDoc(communityDocRef);
+
+        snippetsWithImage.push({
+          ...item,
+          imageURL: communityDoc.data()?.imageURL,
+        });
+      }
+
+      setMySnippets(snippetsWithImage as CommunitySnippet[]);
     } catch (error: any) {
       console.log("getMySnippets", error.message);
       setError(error.message);
