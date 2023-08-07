@@ -1,5 +1,9 @@
 import moment from "moment";
-import { Community, useCommunityStore } from "../../stores/communityStore";
+import {
+  Community,
+  useCommunityData,
+  useCommunityStore,
+} from "../../stores/communityStore";
 import { CakeIcon, EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -21,6 +25,7 @@ function About({ communityData }: Props) {
   const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
   const [uploadingImage, setUploadingImage] = useState(false);
   const { currentCommunity, setCurrentCommunity } = useCommunityStore();
+  const { mySnippets, setMySnippets } = useCommunityData();
 
   async function onUpdateImage() {
     if (!selectedFile) return;
@@ -35,7 +40,28 @@ function About({ communityData }: Props) {
         imageURL: downloadURL,
       });
 
+      await updateDoc(
+        doc(
+          firestore,
+          `users/${user?.uid}/communitySnippets`,
+          communityData.id
+        ),
+        {
+          imageURL: downloadURL,
+        }
+      );
+
+      //update imageurl on local state
       setCurrentCommunity({ ...communityData, imageURL: downloadURL });
+      setMySnippets(
+        mySnippets.map((item) => {
+          if (item.communityId === communityData.id) {
+            return { ...item, imageURL: downloadURL };
+          }
+
+          return item;
+        })
+      );
     } catch (error: any) {
       console.log("onUpdateImage", error.message);
     }

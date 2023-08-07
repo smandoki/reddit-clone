@@ -23,21 +23,27 @@ function CommunityMenu({}: Props) {
         </Menu.Button>
 
         <Menu.Items className="z-50 w-[200px] rounded bg-white text-sm font-medium absolute top-[50px] border border-gray-200">
-          <div className="mt-3 mb-1">
-            <p className="pl-3 text-xs font-medium text-gray-500">MODERATING</p>
-          </div>
+          {mySnippets.find((item) => item.isModerator) && (
+            <>
+              <div className="mt-3 mb-1">
+                <p className="pl-3 text-xs font-medium text-gray-500">
+                  MODERATING
+                </p>
+              </div>
 
-          {mySnippets
-            .filter((item) => item.isModerator)
-            .map((snippet) => (
-              <MenuListItem
-                key={snippet.communityId}
-                displayText={`r/${snippet.communityId}`}
-                imageUrl={snippet.imageURL}
-                iconColor="blue-500"
-                link={`r/${snippet.communityId}`}
-              />
-            ))}
+              {mySnippets
+                .filter((item) => item.isModerator)
+                .map((snippet) => (
+                  <MenuListItem
+                    key={snippet.communityId}
+                    displayText={`r/${snippet.communityId}`}
+                    imageUrl={snippet.imageURL}
+                    iconColor="blue-500"
+                    link={`r/${snippet.communityId}`}
+                  />
+                ))}
+            </>
+          )}
 
           <div className="mt-3 mb-1">
             <p className="pl-3 text-xs font-medium text-gray-500">

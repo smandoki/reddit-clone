@@ -191,6 +191,7 @@ export function useCommunityData() {
 
   return {
     mySnippets,
+    setMySnippets,
     onJoinOrLeaveCommunity,
     getMySnippets,
     loading,
