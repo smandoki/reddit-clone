@@ -38,6 +38,7 @@ function PostItem({
   const [awaitingDelete, setAwaitingDelete] = useState(false);
   const singlePostPage = !onSelectPost;
   const navigate = useNavigate();
+  const [imageLoading, setImageLoading] = useState(true);
 
   async function handleDelete(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     try {
@@ -133,11 +134,16 @@ function PostItem({
         <p className="text-sm px-2">{post.body}</p>
 
         {post.imageURL && (
-          <div className="flex justify-center items-center p-2">
+          <div
+            className={`flex justify-center items-center p-2 ${
+              imageLoading ? "animate-pulse h-[280px] bg-gray-300 m-2" : ""
+            }`}
+          >
             <img
               src={post.imageURL}
               alt="Post Image"
-              className="max-h-[460px]"
+              className={`max-h-[460px] ${imageLoading ? "hidden" : ""}`}
+              onLoad={() => setImageLoading(false)}
             />
           </div>
         )}

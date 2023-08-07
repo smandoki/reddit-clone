@@ -47,7 +47,7 @@ function CommentInput({
           <LoadingButton
             isLoading={createLoading}
             onClick={onCreateComment}
-            disabled={!user}
+            disabled={!user || !commentText}
             className="rounded-full bg-blue-500 text-white py-1 px-5 text-sm font-semibold hover:brightness-95 active:brightness-90"
           >
             Comment
