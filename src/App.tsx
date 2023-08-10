@@ -11,6 +11,7 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/submit" element={<Submit />} />
           <Route path="/r/:communityId" element={<CommunityPage />} />
           <Route path="/r/:communityId/submit" element={<Submit />} />
           <Route

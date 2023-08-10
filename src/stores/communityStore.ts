@@ -34,6 +34,7 @@ export interface CommunityState {
   setMySnippets: (snippets: CommunitySnippet[]) => void;
   currentCommunity?: Community;
   setCurrentCommunity: (community: Community) => void;
+  resetCurrentCommunity: () => void;
 }
 
 export const useCommunityStore = create<CommunityState>()((set) => ({
@@ -45,12 +46,18 @@ export const useCommunityStore = create<CommunityState>()((set) => ({
   currentCommunity: undefined,
   setCurrentCommunity: (community: Community) =>
     set({ currentCommunity: community }),
+  resetCurrentCommunity: () => set({ currentCommunity: undefined }),
 }));
 
 //custom hook for handling community data
 export function useCommunityData() {
-  const { mySnippets, setMySnippets, currentCommunity, setCurrentCommunity } =
-    useCommunityStore();
+  const {
+    mySnippets,
+    setMySnippets,
+    currentCommunity,
+    setCurrentCommunity,
+    resetCurrentCommunity,
+  } = useCommunityStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [user] = useAuthState(auth);
@@ -217,5 +224,6 @@ export function useCommunityData() {
     currentCommunity,
     setCurrentCommunity,
     snippetsFetched,
+    resetCurrentCommunity,
   };
 }

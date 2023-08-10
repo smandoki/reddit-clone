@@ -4,6 +4,7 @@ import NewPostForm from "../Posts/NewPostForm";
 import { auth } from "../../firebase/firebaseConfig";
 import { useCommunityData } from "../../stores/communityStore";
 import About from "./About";
+import CommunityListbox from "./CommunityListbox";
 
 type Props = {};
 
@@ -18,6 +19,9 @@ function Submit({}: Props) {
           <h2 className="py-[14px] border-b border-white font-medium">
             Create a post
           </h2>
+
+          <CommunityListbox />
+
           {user && (
             <NewPostForm
               user={user}
