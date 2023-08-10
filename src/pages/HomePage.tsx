@@ -17,6 +17,7 @@ import PostItem from "../components/Posts/PostItem";
 import { useCommunityData } from "../stores/communityStore";
 import Recommendations from "../components/Community/Recommendations";
 import Premium from "../components/Community/Premium";
+import PersonalHome from "../components/Community/PersonalHome";
 
 type Props = {};
 
@@ -152,7 +153,7 @@ function HomePage({}: Props) {
       <div className="flex flex-col gap-4">
         <Recommendations />
         <Premium />
-        {/* Home Component */}
+        <PersonalHome />
       </div>
     </PageContent>
   );

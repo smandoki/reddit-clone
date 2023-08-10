@@ -1,14 +1,14 @@
 import { Menu } from "@headlessui/react";
 import { ChevronDownIcon, HomeIcon, PlusIcon } from "@heroicons/react/24/solid";
 import CreateCommunityModal from "../../Modal/CreateCommunity/CreateCommunityModal";
-import { useState } from "react";
 import { useCommunityStore } from "../../../stores/communityStore";
 import MenuListItem from "./MenuListItem";
+import { useCommunityModalStore } from "../../../stores/communityModalStore";
 
 type Props = {};
 
 function CommunityMenu({}: Props) {
-  const [open, setOpen] = useState(false);
+  const { open, setOpen } = useCommunityModalStore();
   const { mySnippets } = useCommunityStore();
 
   return (
