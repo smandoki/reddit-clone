@@ -5,7 +5,7 @@ import {
   useCommunityStore,
 } from "../../stores/communityStore";
 import { CakeIcon, EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore, storage } from "../../firebase/firebaseConfig";
 import { useRef, useState } from "react";
@@ -14,6 +14,7 @@ import RedditFace from "../RedditFace";
 import Spinner from "../Spinner";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { doc, updateDoc } from "firebase/firestore";
+import { useAuthModalStore } from "../../stores/authModalStore";
 
 type Props = {
   communityData: Community;
@@ -26,6 +27,8 @@ function About({ communityData }: Props) {
   const [uploadingImage, setUploadingImage] = useState(false);
   const { currentCommunity, setCurrentCommunity } = useCommunityStore();
   const { mySnippets, setMySnippets } = useCommunityData();
+  const navigate = useNavigate();
+  const { setAuthModalState } = useAuthModalStore();
 
   async function onUpdateImage() {
     if (!selectedFile) return;
@@ -57,6 +60,15 @@ function About({ communityData }: Props) {
 
     setUploadingImage(false);
     setSelectedFile("");
+  }
+
+  function onClickCreatePost() {
+    if (!user) {
+      setAuthModalState(true, "login");
+      return;
+    }
+
+    navigate(`/r/${communityData.id}/submit`);
   }
 
   return (
@@ -92,11 +104,12 @@ function About({ communityData }: Props) {
           )}
         </div>
 
-        <Link to={`/r/${communityData.id}/submit`} className="w-full flex">
-          <button className="flex grow items-center justify-center h-[30px] mt-3 rounded-full bg-blue-500 text-white px-4 py-2 hover:brightness-95 active:brightness-90">
-            Create Post
-          </button>
-        </Link>
+        <button
+          onClick={onClickCreatePost}
+          className="flex grow items-center justify-center h-[30px] mt-3 rounded-full bg-blue-500 text-white px-4 py-2 hover:brightness-95 active:brightness-90"
+        >
+          Create Post
+        </button>
 
         {user?.uid === communityData.creatorId && (
           <>
