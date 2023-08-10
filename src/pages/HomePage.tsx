@@ -15,6 +15,7 @@ import { Post } from "../stores/postsStore";
 import PostSkeletonLoader from "../components/Posts/PostSkeletonLoader";
 import PostItem from "../components/Posts/PostItem";
 import { useCommunityData } from "../stores/communityStore";
+import Recommendations from "../components/Community/Recommendations";
 
 type Props = {};
 
@@ -148,7 +149,7 @@ function HomePage({}: Props) {
         )}
       </>
       <>
-        {/* Top Communities */}
+        <Recommendations />
         {/* Reddit Premium */}
         {/* Home Component */}
       </>

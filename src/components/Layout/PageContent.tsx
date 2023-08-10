@@ -7,7 +7,7 @@ type Props = {
 function PageContent({ children }: Props) {
   return (
     <div className="flex border justify-center py-4">
-      <div className="flex border w-[95%] justify-center max-w-[860px]">
+      <div className="flex border w-[95%] justify-center max-w-[900px]">
         {/* left column */}
         <div className="flex flex-col w-full md:w-[65%] md:mr-6 border">
           {children[0]}
