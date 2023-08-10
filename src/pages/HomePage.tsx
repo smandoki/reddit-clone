@@ -18,6 +18,7 @@ import { useCommunityData } from "../stores/communityStore";
 import Recommendations from "../components/Community/Recommendations";
 import Premium from "../components/Community/Premium";
 import PersonalHome from "../components/Community/PersonalHome";
+import CreatePostLink from "../components/Community/CreatePostLink";
 
 type Props = {};
 
@@ -133,6 +134,8 @@ function HomePage({}: Props) {
           <PostSkeletonLoader />
         ) : (
           <div className="flex flex-col gap-3">
+            <CreatePostLink />
+
             {posts.map((post) => (
               <PostItem
                 key={post.id}

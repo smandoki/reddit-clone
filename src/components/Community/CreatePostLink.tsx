@@ -4,6 +4,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useParams, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase/firebaseConfig";
 import { useAuthModalStore } from "../../stores/authModalStore";
+import { useCommunityData } from "../../stores/communityStore";
 
 type Props = {};
 
@@ -12,6 +13,7 @@ function CreatePostLink({}: Props) {
   const navigate = useNavigate();
   const [user] = useAuthState(auth);
   const { setAuthModalState } = useAuthModalStore();
+  const { resetCurrentCommunity } = useCommunityData();
 
   function onClick(query?: string) {
     if (!user) {
@@ -19,7 +21,12 @@ function CreatePostLink({}: Props) {
       return;
     }
 
-    navigate(`/r/${communityId}/submit${query ? "?" + query : ""}`);
+    if (communityId) {
+      navigate(`/r/${communityId}/submit${query ? "?" + query : ""}`);
+    } else {
+      resetCurrentCommunity();
+      navigate(`/submit${query ? "?" + query : ""}`);
+    }
   }
 
   return (
