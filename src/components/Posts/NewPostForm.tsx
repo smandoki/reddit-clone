@@ -24,9 +24,10 @@ import useSelectFile from "../../hooks/useSelectFile";
 
 type Props = {
   user: User;
+  communityImageURL?: string;
 };
 
-function NewPostForm({ user }: Props) {
+function NewPostForm({ user, communityImageURL }: Props) {
   const [urlSearchParams] = useSearchParams();
   const [textInputs, setTextInputs] = useState({
     title: "",
@@ -58,6 +59,7 @@ function NewPostForm({ user }: Props) {
       numberOfComments: 0,
       voteStatus: 0,
       createdAt: serverTimestamp() as Timestamp,
+      communityImageUrl: communityImageURL || "",
     };
 
     try {

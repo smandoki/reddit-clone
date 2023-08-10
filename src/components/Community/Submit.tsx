@@ -18,7 +18,12 @@ function Submit({}: Props) {
           <h2 className="py-[14px] border-b border-white font-medium">
             Create a post
           </h2>
-          {user && <NewPostForm user={user} />}
+          {user && (
+            <NewPostForm
+              user={user}
+              communityImageURL={currentCommunity?.imageURL}
+            />
+          )}
         </div>
       </>
       <div className="mt-[14px]">

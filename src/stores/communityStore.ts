@@ -56,6 +56,7 @@ export function useCommunityData() {
   const [user] = useAuthState(auth);
   const { setAuthModalState } = useAuthModalStore();
   const params = useParams();
+  const [snippetsFetched, setSnippetsFetched] = useState(false);
 
   function onJoinOrLeaveCommunity(communityData: Community, isJoined: boolean) {
     //user must be signed in before they can join
@@ -104,6 +105,7 @@ export function useCommunityData() {
     }
 
     setLoading(false);
+    setSnippetsFetched(true);
   }
 
   useEffect(() => {
@@ -111,6 +113,7 @@ export function useCommunityData() {
       getMySnippets();
     } else {
       setMySnippets([]);
+      setSnippetsFetched(false);
     }
   }, [user]);
 
@@ -123,7 +126,6 @@ export function useCommunityData() {
       const newSnippet: CommunitySnippet = {
         communityId: communityData.id,
         isModerator: user?.uid === communityData.creatorId,
-        imageURL: communityData.imageURL || "",
       };
 
       //create snippet on user doc
@@ -214,5 +216,6 @@ export function useCommunityData() {
     error,
     currentCommunity,
     setCurrentCommunity,
+    snippetsFetched,
   };
 }

@@ -226,5 +226,6 @@ export function usePosts() {
     onSelectPost,
     onDeletePost,
     getPostVotes,
+    setPostVotes,
   };
 }

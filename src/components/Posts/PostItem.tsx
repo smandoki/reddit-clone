@@ -15,7 +15,8 @@ import {
 import moment from "moment";
 import { useState } from "react";
 import LoadingButton from "../LoadingButton";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import RedditFace from "../RedditFace";
 
 type Props = {
   post: Post;
@@ -24,6 +25,7 @@ type Props = {
   onVote: (post: Post, vote: number, communityId: string) => void;
   onDeletePost: (post: Post) => Promise<boolean>;
   onSelectPost?: () => void;
+  homePage?: boolean;
 };
 
 function PostItem({
@@ -33,6 +35,7 @@ function PostItem({
   onVote,
   onDeletePost,
   onSelectPost,
+  homePage,
 }: Props) {
   const [error, setError] = useState("");
   const [awaitingDelete, setAwaitingDelete] = useState(false);
@@ -124,6 +127,26 @@ function PostItem({
         )}
 
         <div className="flex gap-[2px] items-center text-xs text-gray-500 p-2">
+          {homePage && (
+            <>
+              {post.communityImageUrl ? (
+                <img
+                  src={post.communityImageUrl}
+                  alt="community image"
+                  className="w-4 h-4 rounded-full mr-1"
+                />
+              ) : (
+                <RedditFace className="w-4 h-4 fill-blue-500 mr-1" />
+              )}
+
+              <Link
+                to={`/r/${post.communityId}`}
+                className="mr-2 hover:underline font-bold text-black"
+                onClick={(e) => e.stopPropagation()}
+              >{`/r/${post.communityId}`}</Link>
+            </>
+          )}
+
           <p>
             Posted by u/{post.creatorDisplayName}{" "}
             {moment(new Date(post.createdAt.seconds * 1000)).fromNow()}
