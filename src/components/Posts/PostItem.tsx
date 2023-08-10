@@ -15,7 +15,7 @@ import {
 import moment from "moment";
 import { useState } from "react";
 import LoadingButton from "../LoadingButton";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import RedditFace from "../RedditFace";
 
 type Props = {
@@ -42,6 +42,7 @@ function PostItem({
   const singlePostPage = !onSelectPost;
   const navigate = useNavigate();
   const [imageLoading, setImageLoading] = useState(true);
+  const { postId } = useParams();
 
   async function handleDelete(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     try {
@@ -127,7 +128,7 @@ function PostItem({
         )}
 
         <div className="flex gap-[2px] items-center text-xs text-gray-500 p-2">
-          {homePage && (
+          {(homePage || postId) && (
             <>
               {post.communityImageUrl ? (
                 <img

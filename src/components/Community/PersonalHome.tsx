@@ -3,7 +3,7 @@ import RedditFace from "../RedditFace";
 import { auth } from "../../firebase/firebaseConfig";
 import { useCommunityModalStore } from "../../stores/communityModalStore";
 import { useAuthModalStore } from "../../stores/authModalStore";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useCommunityData } from "../../stores/communityStore";
 
 type Props = {};
@@ -13,6 +13,7 @@ function PersonalHome({}: Props) {
   const { setOpen } = useCommunityModalStore();
   const { setAuthModalState } = useAuthModalStore();
   const { resetCurrentCommunity } = useCommunityData();
+  const navigate = useNavigate();
 
   function onOpenCommunityModal() {
     if (!user) {
@@ -21,6 +22,16 @@ function PersonalHome({}: Props) {
     }
 
     setOpen(true);
+  }
+
+  function onCreatePost() {
+    if (!user) {
+      setAuthModalState(true, "login");
+      return;
+    }
+
+    resetCurrentCommunity();
+    navigate("/submit");
   }
 
   return (
@@ -33,13 +44,12 @@ function PersonalHome({}: Props) {
       <p className="px-3 my-2 text-xs">
         Your personal Reddit front page. Built for you.
       </p>
-      <Link
-        to="/submit"
-        onClick={resetCurrentCommunity}
+      <button
+        onClick={onCreatePost}
         className="rounded-full grow border border-blue-500 mb-2 mx-3 p-0.5 bg-blue-500 text-white hover:brightness-95 active:brightness-90 text-center"
       >
         Create Post
-      </Link>
+      </button>
       <button
         onClick={onOpenCommunityModal}
         className="rounded-full grow border border-blue-500 mb-2 mx-3 p-0.5 bg-white text-blue-500 hover:brightness-95 active:brightness-90"

@@ -21,6 +21,7 @@ import {
 import { firestore, storage } from "../../firebase/firebaseConfig";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import useSelectFile from "../../hooks/useSelectFile";
+import { useCommunityData } from "../../stores/communityStore";
 
 type Props = {
   user: User;
@@ -39,6 +40,7 @@ function NewPostForm({ user, communityImageURL }: Props) {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
   const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
+  const { currentCommunity } = useCommunityData();
 
   useEffect(() => {
     if ("media" in Object.fromEntries(urlSearchParams)) setSelectedTab(1);
@@ -48,7 +50,7 @@ function NewPostForm({ user, communityImageURL }: Props) {
   async function handleCreatePost() {
     setLoading(true);
     setError(false);
-    const { communityId } = params;
+    const communityId = params.communityId || currentCommunity?.id;
 
     const newPost: Post = {
       communityId: communityId as string,

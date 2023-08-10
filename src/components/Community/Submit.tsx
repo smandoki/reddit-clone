@@ -5,12 +5,14 @@ import { auth } from "../../firebase/firebaseConfig";
 import { useCommunityData } from "../../stores/communityStore";
 import About from "./About";
 import CommunityListbox from "./CommunityListbox";
+import { useParams } from "react-router-dom";
 
 type Props = {};
 
 function Submit({}: Props) {
   const [user] = useAuthState(auth);
   const { currentCommunity } = useCommunityData();
+  const { communityId } = useParams();
 
   return (
     <PageContent>
@@ -20,7 +22,7 @@ function Submit({}: Props) {
             Create a post
           </h2>
 
-          <CommunityListbox />
+          {!communityId && <CommunityListbox />}
 
           {user && (
             <NewPostForm
