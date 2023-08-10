@@ -16,6 +16,7 @@ import PostSkeletonLoader from "../components/Posts/PostSkeletonLoader";
 import PostItem from "../components/Posts/PostItem";
 import { useCommunityData } from "../stores/communityStore";
 import Recommendations from "../components/Community/Recommendations";
+import Premium from "../components/Community/Premium";
 
 type Props = {};
 
@@ -148,11 +149,11 @@ function HomePage({}: Props) {
           </div>
         )}
       </>
-      <>
+      <div className="flex flex-col gap-4">
         <Recommendations />
-        {/* Reddit Premium */}
+        <Premium />
         {/* Home Component */}
-      </>
+      </div>
     </PageContent>
   );
 }
