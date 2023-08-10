@@ -22,6 +22,7 @@ import { firestore, storage } from "../../firebase/firebaseConfig";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import useSelectFile from "../../hooks/useSelectFile";
 import { useCommunityData } from "../../stores/communityStore";
+import { useAuthModalStore } from "../../stores/authModalStore";
 
 type Props = {
   user: User;
@@ -41,6 +42,7 @@ function NewPostForm({ user, communityImageURL }: Props) {
   const [error, setError] = useState(false);
   const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile();
   const { currentCommunity } = useCommunityData();
+  const { setAuthModalState } = useAuthModalStore();
 
   useEffect(() => {
     if ("media" in Object.fromEntries(urlSearchParams)) setSelectedTab(1);
@@ -48,6 +50,11 @@ function NewPostForm({ user, communityImageURL }: Props) {
   }, []);
 
   async function handleCreatePost() {
+    if (!user) {
+      setAuthModalState(true, "login");
+      return;
+    }
+
     setLoading(true);
     setError(false);
     const communityId = params.communityId || currentCommunity?.id;
