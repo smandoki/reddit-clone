@@ -12,7 +12,8 @@ type Props = {};
 function Recommendations({}: Props) {
   const [communities, setCommunities] = useState<Community[]>([]);
   const [loading, setLoading] = useState(false);
-  const { onJoinOrLeaveCommunity, mySnippets } = useCommunityData();
+  const { onJoinOrLeaveCommunity, mySnippets, communityAwaitingJoin } =
+    useCommunityData();
 
   async function getCommunityRecommendations() {
     setLoading(true);
@@ -91,6 +92,7 @@ function Recommendations({}: Props) {
 
                 <LoadingButton
                   onClick={() => onJoinOrLeaveCommunity(item, isJoined)}
+                  isLoading={item.id === communityAwaitingJoin}
                   className={`text-sm flex items-center px-4 py-1 rounded-full h-[24px] font-medium text-center border border-blue-500 hover:brightness-95 active:brightness-90 ${
                     isJoined
                       ? "bg-white text-blue-500"

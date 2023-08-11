@@ -64,6 +64,7 @@ export function useCommunityData() {
   const { setAuthModalState } = useAuthModalStore();
   const params = useParams();
   const [snippetsFetched, setSnippetsFetched] = useState(false);
+  const [communityAwaitingJoin, setCommunityAwaitingJoin] = useState("");
 
   function onJoinOrLeaveCommunity(communityData: Community, isJoined: boolean) {
     //user must be signed in before they can join
@@ -125,6 +126,7 @@ export function useCommunityData() {
   }, [user]);
 
   async function joinCommunity(communityData: Community) {
+    setCommunityAwaitingJoin(communityData.id);
     try {
       setLoading(true);
       const batch = writeBatch(firestore);
@@ -160,9 +162,11 @@ export function useCommunityData() {
     }
 
     setLoading(false);
+    setCommunityAwaitingJoin("");
   }
 
   async function leaveCommunity(communityId: string) {
+    setCommunityAwaitingJoin(communityId);
     //delete community snippet
     try {
       setLoading(true);
@@ -190,6 +194,7 @@ export function useCommunityData() {
     }
 
     setLoading(false);
+    setCommunityAwaitingJoin("");
   }
 
   async function getCommunityData(communityId: string) {
@@ -225,5 +230,6 @@ export function useCommunityData() {
     setCurrentCommunity,
     snippetsFetched,
     resetCurrentCommunity,
+    communityAwaitingJoin,
   };
 }
