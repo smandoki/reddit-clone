@@ -36,7 +36,10 @@ function PersonalHome({}: Props) {
 
   return (
     <div className="bg-white rounded flex flex-col">
-      <div className="bg-[url('images/redditPersonalHome.png')] h-[40px] bg-cover rounded-tl rounded-tr"></div>
+      <div
+        style={{ backgroundImage: "url('images/redditPersonalHome.png')" }}
+        className="h-[40px] bg-cover rounded-tl rounded-tr"
+      ></div>
       <div className="flex px-3 mt-3 gap-2 items-center font-semibold">
         <RedditFace className="h-10 w-10 fill-brand-100" />
         Home

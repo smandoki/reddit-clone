@@ -14,12 +14,12 @@ function Navbar({}: Props) {
     <header className="flex gap-[2px] h-12 px-2 bg-white justify-between">
       <Link to="/" className="flex items-center md:min-w-max">
         <img
-          src="/images/redditFace.svg"
+          src="images/redditFace.svg"
           alt="reddit logo"
           className="h-8 w-8 min-w-[32px]"
         />
         <img
-          src="/images/redditText.svg"
+          src="images/redditText.svg"
           alt="reddit title"
           className="h-12 hidden md:inline-flex"
         />

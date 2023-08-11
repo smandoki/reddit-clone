@@ -32,7 +32,7 @@ function OAuthButtons({}: Props) {
           className="h-10 flex text-gray-600 bg-white w-full rounded-full justify-center items-center gap-2 p-2 border border-gray-400 hover:bg-gray-50 active:bg-gray-100"
         >
           <img
-            src="/images/googlelogo.png"
+            src="images/googlelogo.png"
             alt="google logo"
             className="h-5 w-5"
           />
