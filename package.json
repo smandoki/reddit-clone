@@ -2,7 +2,7 @@
   "name": "reddit-clone",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://smandoki.github.io/reddit-clone",
+  "homepage": "https://smandoki.github.io/reddit-clone/",
   "type": "module",
   "scripts": {
     "dev": "vite",
