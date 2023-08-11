@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 type Props = {};
 
 function Navbar({}: Props) {
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
 
   return (
     <header className="flex gap-[2px] h-12 px-2 bg-white justify-between">

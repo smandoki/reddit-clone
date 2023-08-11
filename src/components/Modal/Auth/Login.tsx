@@ -13,6 +13,7 @@ function Login({}: Props) {
     password: "",
   });
 
+  //@ts-ignore
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
 

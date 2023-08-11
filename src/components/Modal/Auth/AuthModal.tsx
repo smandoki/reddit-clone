@@ -11,7 +11,7 @@ type Props = {};
 
 function AuthModal({}: Props) {
   const { open, view, setOpen } = useAuthModalStore();
-  const [user, loading, error] = useAuthState(auth);
+  const [user] = useAuthState(auth);
 
   useEffect(() => {
     if (user) setOpen(false);

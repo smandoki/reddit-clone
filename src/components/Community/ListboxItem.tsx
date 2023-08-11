@@ -1,4 +1,3 @@
-import React from "react";
 import RedditFace from "../RedditFace";
 import { Community } from "../../stores/communityStore";
 
