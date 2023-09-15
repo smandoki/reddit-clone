@@ -24,7 +24,7 @@ type Props = {};
 
 function HomePage({}: Props) {
   const [user, loadingUser] = useAuthState(auth);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const {
     posts,
     setPosts,
