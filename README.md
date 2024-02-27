@@ -3,6 +3,7 @@ Basic Reddit clone built using:
 * Typescript
 * TailwindCSS
 * Vite
+* Zustand
 * Google Firebase
   * authentication
   * firestore database
